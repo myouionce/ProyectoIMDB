@@ -1,0 +1,31 @@
+<div class="mt-5 mx-8 px-5 flex justify-content-center">
+  <mat-card appearance="outlined" class="flex justify-content-center align-items-center pt-5 w-6">
+    <mat-card-content class="w-10">
+      <form [formGroup]="userForm">
+        <div class="mb-3">
+          <mat-form-field class="w-full">
+            <mat-label>Usuario o email</mat-label>
+            <input matInput formControlName="firstName" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="w-full">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput formControlName="firstName" required>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+    <div class="flex justify-content-evenly w-full my-5">
+      <button mat-stroked-button
+        [routerLink]="'/signin'">
+        Sign in
+      </button>
+      <button mat-flat-button
+        [routerLink]="'/admin'">
+        log in
+      </button>
+    </div>
+  </mat-card>
+  
+</div>
