@@ -17,16 +17,23 @@ mongoose
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.error("MongoDB connection error:", err));
 
-// Define a schema and model
-const itemSchema = new mongoose.Schema({
-    name: { type: String, required: true, minlength: 3 },
-    createdAt: { type: Date, default: Date.now },
+const PeliculaSchema = new mongoose.Schema({
+    id: { type: Number, required: true, unique: true },
+    titulo: { type: String, required: true },
+    descripcion: { type: String, required: true },
+    genero: { type: [String], required: true },  // Array de géneros
+    director: { type: String, required: true },
+    lanzamiento: { type: Date, required: true },
+    calificacion: { type: Number, required: true, min: 0, max: 10 },  // Calificación de 0 a 10
+    portada: { type: String, required: true },  // URL de la portada
+    fotosExtra: { type: [String], default: [] },  // Array de URLs de imágenes extra
 });
 
-const Item = mongoose.model("Item", itemSchema);
+const Pelicula = mongoose.model("Pelicula", PeliculaSchema);
 
 // Routes
-app.get("/api/items", async (req, res) => {
+// * GETS
+app.get("/actors", async (req, res) => {
     try {
         const items = await Item.find();
         res.json(items);
@@ -35,26 +42,37 @@ app.get("/api/items", async (req, res) => {
     }
 });
 
-app.post("/api/items", async (req, res) => {
+app.get("/peliculas", async (req, res) => {
     try {
-        const newItem = new Item(req.body);
-        const savedItem = await newItem.save();
-        res.json({ message: "Item added", item: savedItem });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        const peliculas = await Pelicula.find();
+        res.json(peliculas);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener las películas" });
     }
 });
 
-app.delete("/api/items/:id", async (req, res) => {
+// * POST: Agregar una película
+app.post("/peliculas", async (req, res) => {
+    try {
+        const nuevaPelicula = new Pelicula(req.body);
+        const peliculaGuardada = await nuevaPelicula.save();
+        res.json({ message: "Película añadida", pelicula: peliculaGuardada });
+    } catch (error) {
+        res.status(500).json({ error: "Error al guardar la película" });
+    }
+});
+
+// * DELETE: Eliminar una película por ID
+app.delete("/peliculas/:id", async (req, res) => {
     try {
         const id = req.params.id;
-        const deletedItem = await Item.findByIdAndDelete(id);
-        if (!deletedItem) {
-            return res.status(404).json({ message: "Item not found" });
+        const deletedPelicula = await Pelicula.findOneAndDelete({ id });
+        if (!deletedPelicula) {
+            return res.status(404).json({ message: "Película no encontrada" });
         }
-        res.json({ message: "Item deleted", item: deletedItem });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.json({ message: "Película eliminada", pelicula: deletedPelicula });
+    } catch (error) {
+        res.status(500).json({ error: "Error al eliminar la película" });
     }
 });
 
