@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const app = express();
 const PORT = 3000;
@@ -9,31 +10,51 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Dummy data
-const items = [
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-];
+// Connect to MongoDB
+const mongoURI = "mongodb+srv://gabops0511:Gabonator_1314@dbweb.ntnf2.mongodb.net/";
+mongoose
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+
+// Define a schema and model
+const itemSchema = new mongoose.Schema({
+    name: { type: String, required: true, minlength: 3 },
+    createdAt: { type: Date, default: Date.now },
+});
+
+const Item = mongoose.model("Item", itemSchema);
 
 // Routes
-app.get("/api/items", (req, res) => {
-    res.json(items);
+app.get("/api/items", async (req, res) => {
+    try {
+        const items = await Item.find();
+        res.json(items);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.post("/api/items", (req, res) => {
-    const newItem = req.body;
-    items.push({ id: items.length + 1, ...newItem });
-    res.json({ message: "Item added", item: newItem });
+app.post("/api/items", async (req, res) => {
+    try {
+        const newItem = new Item(req.body);
+        const savedItem = await newItem.save();
+        res.json({ message: "Item added", item: savedItem });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.delete("/api/items/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const index = items.findIndex((item) => item.id === id);
-    if (index > -1) {
-        const deletedItem = items.splice(index, 1);
+app.delete("/api/items/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const deletedItem = await Item.findByIdAndDelete(id);
+        if (!deletedItem) {
+            return res.status(404).json({ message: "Item not found" });
+        }
         res.json({ message: "Item deleted", item: deletedItem });
-    } else {
-        res.status(404).json({ message: "Item not found" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 
