@@ -1,1 +1,8 @@
-<p>movie-list works!</p>
+<h1 class="text-3xl">Películas</h1>
+<div class="grid grid-cols-4 pt-2 ">
+    @for (pelicula of peliculas; track $index) {
+        <div class="col-12 sm:col-4 md:col-3 xl:col-2">
+            <app-movie-card [pelicula]="pelicula"></app-movie-card>
+        </div>
+    }
+</div>
