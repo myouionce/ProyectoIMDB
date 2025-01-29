@@ -1,1 +1,102 @@
-<p>movies-table works!</p>
+
+
+
+<div *ngIf="peliculas.length !== 0; else table" 
+    class="alert alert-warning text-center">
+    No hay peliculas que mostrar
+</div>
+  
+<ng-template #table >
+  <div class="overflow-x-auto w-full">
+    <table mat-table [dataSource]="dataSource" matSort
+    (matSortChange)="announceSortChange($event)"
+    class="shadow-3">
+    <ng-container matColumnDef="titulo" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header 
+          sortActionDescription="Sort by titulo">Titulo</th>
+      <td mat-cell *matCellDef="let element" >{{element.titulo}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="genero" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header 
+          sortActionDescription="Sort by nombre">Genero</th>
+      <td mat-cell *matCellDef="let element" >{{element.genero}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="director" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header 
+          sortActionDescription="Sort by director">Director</th>
+      <td mat-cell *matCellDef="let element" >{{element.director}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="año" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header 
+          sortActionDescription="Sort by año">Año</th>
+      <td mat-cell *matCellDef="let element" >{{element.lanzamiento}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="calificacion" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header 
+          sortActionDescription="Sort by nombre">Calificacion</th>
+      <td mat-cell *matCellDef="let element" >{{element.calificacion}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion" >
+      <th mat-header-cell *matHeaderCellDef >Descripcion</th>
+      <td mat-cell *matCellDef="let element" class="white-space-nowrap
+      overflow-hidden
+      text-overflow-ellipsis  
+      max-w-20rem">{{element.descripcion}}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let element"><button mat-icon-button><mat-icon>delete</mat-icon></button></td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Edit</th>
+      <td mat-cell *matCellDef="let element"><button mat-icon-button [routerLink]="['/admin/movie', element.titulo]"><mat-icon>edit</mat-icon></button></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+    <tr mat-row *matRowDef="let row; columns:displayedColumns;" ></tr>
+
+    <!-- <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Icon</th>
+        <th>Bandera</th>
+        <th>Nombre</th>
+        <th>Capital</th>
+        <th>Población</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let country of actores; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>
+          {{ country.flag }}
+        </td>
+        <td>
+          <img [src]="country.flags.svg" [alt]="country.name.common" height="20" width="30">
+        </td>
+        <td>{{ country.name.common }}</td>
+        <td>{{ country.capital }}</td>
+        <td>{{ country.population | number }}</td>
+        <td>
+          <a [routerLink]="[ '/admin/actor/']" >view</a>
+        </td>
+
+      </tr>
+    </tbody>
+    -->
+    </table>
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+               showFirstLastButtons
+               aria-label="Select page of actors" class=" bg-purple-500 mt-5">
+  </mat-paginator>
+</ng-template>

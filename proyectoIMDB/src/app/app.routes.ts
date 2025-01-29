@@ -8,8 +8,6 @@ import { MovieComponent } from './shared/components/movie/movie.component';
 import { ActorComponent } from './shared/components/actor/actor.component';
 import { ByMovieComponent } from './admin/pages/by-movie/by-movie.component';
 import { ByActorComponent } from './admin/pages/by-actor/by-actor.component';
-import { AddMovieComponent } from './admin/pages/add-movie/add-movie.component';
-import { AddActorComponent } from './admin/pages/add-actor/add-actor.component';
 
 export const routes: Routes = [
 
@@ -35,11 +33,11 @@ export const routes: Routes = [
       },
       {
         path: 'add-movie',
-        component: AddMovieComponent
+        component: MovieComponent
       },
       {
         path: 'add-actor',
-        component: AddActorComponent
+        component: ActorComponent
       },
       {
         path: 'movie/:id',
@@ -48,6 +46,10 @@ export const routes: Routes = [
       {
         path: 'actor/:id',
         component: ActorComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'by-movie'
       }
     ]
   },

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button'
-import { ActorsTableComponent } from "../../components/actors-table/actors-table.component";
+import { MoviesTableComponent } from '../../components/movies-table/movies-table.component';
 
 
 @Component({
   selector: 'app-by-movie',
-  imports: [MatButtonModule, ActorsTableComponent],
+  imports: [MatButtonModule, MoviesTableComponent],
   templateUrl: './by-movie.component.html',
   styleUrl: './by-movie.component.scss'
 })

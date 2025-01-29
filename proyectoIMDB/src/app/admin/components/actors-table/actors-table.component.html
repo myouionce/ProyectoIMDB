@@ -1,16 +1,51 @@
 
 
 
-<div *ngIf="actores.length === 0; else table" 
+<div *ngIf="actores.length !== 0; else table" 
     class="alert alert-warning text-center">
     No hay actores que mostrar
 </div>
   
   <ng-template #table>
-    <table class="table table-hover">
-      <thead>
+    <table mat-table [dataSource]="dataSource" matSort
+    (matSortChange)="announceSortChange($event)"
+        class="shadow-3">
+      <ng-container matColumnDef="nombre" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header 
+            sortActionDescription="Sort by nombre">Nombre</th>
+        <td mat-cell *matCellDef="let element" >{{element.nombre}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha_de_nacimiento" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
+            sortActionDescription="Sort by fecha">Fecha de Nacimiento</th>
+        <td mat-cell *matCellDef="let element">{{element.fecha_de_nacimiento}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="biografia" >
+        <th mat-header-cell *matHeaderCellDef >Bio</th>
+        <td mat-cell *matCellDef="let element" class="white-space-nowrap
+        overflow-hidden
+        text-overflow-ellipsis  
+        max-w-20rem">{{element.biografia}}</td>
+      </ng-container>
+      
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Delete</th>
+        <td mat-cell *matCellDef="let element"><button mat-icon-button><mat-icon>delete</mat-icon></button></td>
+      </ng-container>
+
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>Edit</th>
+        <td mat-cell *matCellDef="let element"><button mat-icon-button [routerLink]="['/admin/actor', element.nombre]"><mat-icon>edit</mat-icon></button></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+      <tr mat-row *matRowDef="let row; columns:displayedColumns;" ></tr>
+
+      <!-- <thead>
         <tr>
-          <th>#</th>
+          <th>Nombre</th>
           <th>Icon</th>
           <th>Bandera</th>
           <th>Nombre</th>
@@ -37,7 +72,12 @@
   
         </tr>
       </tbody>
-  
+   -->
     </table>
   
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of actors" class=" bg-purple-500 mt-5">
+    </mat-paginator>
   </ng-template>

@@ -22,7 +22,7 @@ import {MatListModule} from '@angular/material/list'
 export class LayoutAdminPageComponent {
   public sidebarItems = [
     {label: 'Peliculas', icon: 'movie', url:'./by-movie'},
-    {label: 'Actores', icon: 'add', url:'./by-actor'},
+    {label: 'Actores', icon: 'people', url:'./by-actor'},
     {label: 'Agregar Pelicula', icon: 'add_to_queue', url:'./add-movie'},
     {label: 'Agregar Actor', icon: 'person_add', url:'./add-actor'}
   ]
