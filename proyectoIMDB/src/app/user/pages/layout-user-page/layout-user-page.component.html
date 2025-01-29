@@ -1,1 +1,38 @@
-<p>layout-user-page works!</p>
+<mat-sidenav-container fullscreen>
+    <mat-sidenav #sidenav mode="over" [ngStyle]="{width: '250px'}">
+        <mat-toolbar class="mat-loona">
+            <span>Menú</span>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="sidenav.toggle()">
+                <mat-icon class="text-white">menu</mat-icon>
+            </button>
+        </mat-toolbar>
+        <mat-nav-list>
+            @for (item of sidebarItems; track $index) {
+                <mat-list-item
+                        (click)="sidenav.toggle()"
+                        [routerLink]="[item.url]">
+                    <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+                    {{item.label}}
+                </mat-list-item>
+            }
+        </mat-nav-list>
+    </mat-sidenav>
+  
+    <mat-toolbar style="background-color: blueviolet; color: white">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span class="spacer"></span>
+        <button mat-icon-button
+          [routerLink]="'/login'">
+          <mat-icon>logout</mat-icon>  
+        </button>
+    </mat-toolbar>
+  
+    <div class="container p-2">
+        <router-outlet></router-outlet>
+    </div>
+  
+  </mat-sidenav-container>
+  

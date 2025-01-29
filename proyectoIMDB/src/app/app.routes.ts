@@ -8,6 +8,7 @@ import { MovieComponent } from './shared/components/movie/movie.component';
 import { ActorComponent } from './shared/components/actor/actor.component';
 import { ByMovieComponent } from './admin/pages/by-movie/by-movie.component';
 import { ByActorComponent } from './admin/pages/by-actor/by-actor.component';
+import { LayoutUserPageComponent } from './user/pages/layout-user-page/layout-user-page.component';
 
 export const routes: Routes = [
 
@@ -55,7 +56,7 @@ export const routes: Routes = [
   },
   {
     path: 'user',
-    component: LayoutAdminPageComponent,
+    component: LayoutUserPageComponent,
     children: [
       {
         path: 'actorlist',
@@ -72,7 +73,12 @@ export const routes: Routes = [
       {
         path: 'actor/:id',
         component: ActorComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'movielist'
       }
+      
     ]
   },
   {
