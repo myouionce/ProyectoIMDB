@@ -255,4 +255,27 @@ export class DataListComponent {
       
     ];
   }
+  currentPage = 1;
+  itemsPerPage = 12;
+  get paginatedData(){
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.data.slice(start, end);
+  }
+  get totalPages() {
+    return Math.ceil(this.data.length / this.itemsPerPage);
+  }
+  
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+  
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+  
 }

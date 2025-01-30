@@ -1,7 +1,7 @@
 @if(dataType){
     <h1 class="text-3xl">Actores</h1>
     <div class="grid grid-cols-4 pt-2 ">
-        @for (actor of data; track $index) {
+        @for (actor of paginatedData; track $index) {
             <div class="col-12 sm:col-4 md:col-3 xl:col-2">
                 <app-actor-card [actor]="actor"></app-actor-card>
             </div>
@@ -10,10 +10,15 @@
 }@else {
     <h1 class="text-3xl">Películas</h1>
     <div class="grid grid-cols-4 pt-2 ">
-        @for (pelicula of data; track $index) {
+        @for (pelicula of paginatedData; track $index) {
             <div class="col-12 sm:col-4 md:col-3 xl:col-2">
                 <app-movie-card [pelicula]="pelicula"></app-movie-card>
             </div>
         }
     </div>
 }
+<div class="flex justify-center mt-4">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{ currentPage }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Siguiente</button>
+</div>
