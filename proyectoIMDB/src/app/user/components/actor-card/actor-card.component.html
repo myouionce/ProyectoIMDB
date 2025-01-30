@@ -3,7 +3,7 @@
         <mat-card-title>{{actor.nombre}}</mat-card-title>
         <mat-card-subtitle>{{actor.nacimiento}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
+    <img mat-card-xl-image [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
     <mat-card-content>
         <strong>Biografía:</strong>
         <p>{{ actor.biografia | slice:0:150 }}{{ actor.biografia.length > 150 ? '...' : '' }}</p>
