@@ -4,10 +4,12 @@ import { Pelicula, Actor } from '../../../shared/interfaces/imdb.interface';
 import { MovieCardComponent } from "../movie-card/movie-card.component";
 import { ActivatedRoute } from '@angular/router';
 import { ActorCardComponent } from "../actor-card/actor-card.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-data-list',
-  imports: [CommonModule, MovieCardComponent, ActorCardComponent],
+  imports: [CommonModule, MovieCardComponent, ActorCardComponent, MatButtonModule, MatIconModule],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss'
 })
