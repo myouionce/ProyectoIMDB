@@ -3,7 +3,7 @@
         <mat-card-title>{{pelicula.titulo}}</mat-card-title>
         <mat-card-subtitle>{{pelicula.lanzamiento}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image [src]="pelicula.portada" [alt]="pelicula.titulo">
+    <img mat-card-image [src]="pelicula.portada" [alt]="pelicula.titulo" (error)="onImageError($event)">
     <mat-card-content>
         <strong>Género:</strong>
         <mat-chip-listbox>

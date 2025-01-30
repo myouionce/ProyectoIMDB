@@ -30,4 +30,8 @@ export class MovieCardComponent {
       throw new Error('Attribute pelicula is required');
     }
   }
+
+  onImageError(event: any) {
+    event.target.src = 'notFound.png'
+  }
 }

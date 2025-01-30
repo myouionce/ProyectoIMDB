@@ -1,1 +1,18 @@
-<p>actor-card works!</p>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{actor.nombre}}</mat-card-title>
+        <mat-card-subtitle>{{actor.nacimiento}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
+    <mat-card-content>
+        <strong>Biografía:</strong>
+        <p>{{ actor.biografia | slice:0:150 }}{{ actor.biografia.length > 150 ? '...' : '' }}</p>
+        <mat-divider></mat-divider>
+    </mat-card-content>    
+    <mat-card-actions>
+        <button mat-raised-button color="primary" [routerLink]="['/user/actor/', actor._id.$oid]">
+            <mat-icon>info</mat-icon>
+            Ver más
+        </button>
+    </mat-card-actions>
+</mat-card>
