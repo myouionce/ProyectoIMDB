@@ -1,14 +1,64 @@
-<div *ngIf="movieMode === 'view'; else administrador" class="my-5 mx-8 flex flex-row justify-content-between w-full">
-  <mat-card appearance="outlined" class="w-6 mr-4 h-full">
-    <mat-card-content>
-      <h1>hola User</h1>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="w-1/2 ml-4">
-    <mat-card-content>
-      <h1>Hola mundo</h1>
-    </mat-card-content>
-  </mat-card>
+<div *ngIf="movieMode === 'view'; else administrador" class="my-5 mx-8 flex flex-row justify-content-between">
+  <div class="my-5 ml-5 flex justify-content-center w-full">
+      <mat-card class="w-full">
+        <div class="mx-3 mt-3 flex justify-content-between">
+          <mat-card-header class="flex justify-content-between w-full">
+                <mat-card-title class="text-3xl">{{movie.titulo}}</mat-card-title>
+                <span class="font-medium text-xl pt-3 pb-3 px-3 border-round-3xl" style=" color:mistyrose; background-color:crimson;">{{movie.lanzamiento}}</span>
+              <mat-card-subtitle style="color:darkgrey" class="text-xl mt-1">Director: {{movie.director}}</mat-card-subtitle>
+          </mat-card-header>
+        </div>
+        <mat-card-content>
+          <hr>
+          <div class="flex justify-content-around w-full overflow-x-auto quitarContainer">
+            <div class="flex flex-column align-items-center mt-3 mx-3 sm:w-7 md:w-6 xl:w-5">
+              <img [src]="movie.portada" alt="" mat-card-image class="shadow-4 w-full mb-3">
+            </div>
+            @for (photo of movie.fotosExtra; track $index; ) {
+              <div class="flex flex-column align-items-center mt-3 mx-3 sm:w-7 md:w-6 xl:w-5">
+                <img [src]="photo" mat-card-image class="w-full shadow-4">
+              </div>
+            }
+          </div>
+          <hr>
+          <div class="mt-4 pr-5 flex justify-content-between">
+            <!-- <span class="w-9">{{movie.descripcion}}</span> -->
+            <div class="sm:px-2 xl:px-4 pb-3 xl:mb-2">
+              <span style="background-color:crimson; color:mistyrose" class="sm:text-sm font-light xl:text-xl border-0 sm:mr-1 xl:mr-2 p-2 border-round-sm" *ngFor="let genero of movieGenders.value; let i = index">
+                {{genero}}
+              </span>
+            </div>
+            <div>
+              <mat-icon class="sm:text-2xl xl:text-3xl sm:mx-0 xl:mx-1" style="color:goldenrod;" *ngFor="let icon of getStars(movie.calificacion)">
+                {{ icon }}
+              </mat-icon>
+            </div>
+
+          </div>
+
+          <div class="shadow-1 mb-3 pl-4 pr-2 py-1 w-9">
+            <h3>Sinopsis:</h3>
+            <p>{{movie.descripcion}}</p>
+          </div>
+
+          <hr>
+          <div class="flex justify-content-around w-full overflow-x-auto quitarContainer" >
+            <hr>
+            @for (actor of actores_data; track $index; ) {
+              <div class="flex flex-column align-items-center mx-4 mt-3 sm:w-7 md:w-6 xl:w-5 ">
+                <img [src]="actor.foto" mat-card-lg-image class="w-auto shadow-2 border-circle ">
+                <div class="flex justify-content-around mx-5 mt-2 w-full">
+                  <span class="text-sm">{{actor.nombre}}</span>
+                  <span class="text-sm font-light">{{actor.fecha_de_nacimiento.split('-')[0]}}</span>
+                </div>
+              </div>
+              <hr>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+  </div>
 </div>
 <ng-template #administrador >
   <div class="my-5 ml-5 flex justify-content-center">
@@ -50,17 +100,20 @@
           </div>
           <ng-template #fotos >
             
-            <div class="flex justify-content-around w-full overflow-x-auto">
-              <div class="flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
-                <img [src]="movie.portada" alt="" mat-card-image class="shadow-4 w-full mb-3">
-                <button mat-flat-button>x</button>
-              </div>
-              @for (photo of movie.fotosExtra; track $index; ) {
-                <div class="flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
-                  <img [src]="photo" mat-card-image class="w-full shadow-4 mb-3">
-                  <button mat-flat-button>x</button>
+            <div class="flex justify-content-around w-full overflow-x-auto quitarContainer">
+              <mat-button-toggle-group class="shadow-none" [ngClass]="{'w-full':( movie.portada !== ''?1:0) + movie.fotosExtra.length < 2}" appearance="legacy" name="fontStyle" aria-label="Font Style">
+                <div class=" flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
+                  <button class="relative right-50 font-bold text-lg" mat-button>x</button>
+                  <mat-button-toggle value="5"><img [src]="movie.portada" alt="" mat-card-image class="shadow-4 w-full mb-3"></mat-button-toggle>
                 </div>
-              }
+                @for (photo of movie.fotosExtra; track $index; ) {
+                  <div class=" flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
+                    <button class="relative right-50 font-bold text-lg" mat-button>x</button>
+                    <mat-button-toggle [value]="$index"><img [src]="photo" mat-card-image class="w-full shadow-4 mb-3"></mat-button-toggle>
+                  </div>
+                }
+              
+              </mat-button-toggle-group>
             </div>
 
           </ng-template>
