@@ -90,5 +90,15 @@ movieCtrl.getMovieByFilters = async (req, res) => {
 
 //TODO borrar pelicula Reminder: Hacer un metodo para vincular actores con pelicula pero en el controlador respectivo
 
+movieCtrl.createMovie = async (req, res) => {
+    try {
+        const { titulo, descripcion, genero, director, lanzamiento, calificacion, portada, fotosExtra } = req.body;
+        const newMovie = new Movie({ titulo, descripcion, genero, director, lanzamiento, calificacion, portada, fotosExtra });
+        await newMovie.save();
+        return res.status(201).send({message: 'Pelicula creada correctamente'});
+    } catch (err) {
+        return res.status(500).send({message: 'Error al crear la pelicula'});
+    }
+}
 
 module.exports = movieCtrl;
