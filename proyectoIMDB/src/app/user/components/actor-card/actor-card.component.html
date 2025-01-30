@@ -1,18 +1,16 @@
 <mat-card>
-    <mat-card-header>
-        <mat-card-title>{{actor.nombre}}</mat-card-title>
-        <mat-card-subtitle>{{actor.nacimiento}}</mat-card-subtitle>
+    <mat-card-header class="mb-2 ">
+        <div class="font-medium text-lg white-space-nowrap overflow-hidden text-overflow-ellipsis">
+            {{actor.nombre}}
+        </div>
     </mat-card-header>
-    <img mat-card-xl-image [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
-    <mat-card-content>
-        <strong>Biografía:</strong>
-        <p>{{ actor.biografia | slice:0:150 }}{{ actor.biografia.length > 150 ? '...' : '' }}</p>
-        <mat-divider></mat-divider>
+    <img mat-card-xl-image class="w-full" [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
+    <mat-card-content class="px-2 py-2 ">
     </mat-card-content>    
-    <mat-card-actions>
+    <div class="flex justify-content-center mb-2">
         <button mat-raised-button color="primary" [routerLink]="['/user/actor/', actor._id.$oid]">
             <mat-icon>info</mat-icon>
             Ver más
         </button>
-    </mat-card-actions>
+    </div>
 </mat-card>

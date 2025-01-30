@@ -96,12 +96,12 @@
               <mat-button-toggle-group class="shadow-none" [ngClass]="{'w-full':( actor.foto !== ''?1:0) + actor.fotosExtra.length < 2}"  appearance="legacy" name="fontStyle" aria-label="Font Style">
                 <div class="flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
                   <button class="relative right-50 font-bold text-lg" mat-button>x</button>
-                  <mat-button-toggle><img [src]="actor.foto" alt="" mat-card-xl-image class="shadow-4 w-full mb-3"></mat-button-toggle>
+                  <mat-button-toggle><img [src]="actor.foto" alt="" mat-card-image class="shadow-4 w-full mb-3"></mat-button-toggle>
                 </div>
                 @for (photo of actor.fotosExtra; track $index; ) {
                   <div class="flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
                     <button class="relative right-50 font-bold text-lg" mat-button>x</button>
-                    <mat-button-toggle><img [src]="photo" mat-card-xl-image class="w-full shadow-4 mb-3"></mat-button-toggle>
+                    <mat-button-toggle><img [src]="photo" mat-card-image class="w-full shadow-4 mb-3"></mat-button-toggle>
                   </div>
                 }
               </mat-button-toggle-group>
@@ -111,7 +111,7 @@
           
           <mat-form-field class="w-full">
             <mat-label>Biografia</mat-label>
-            <textarea matInput required>{{actor.biografia}}</textarea>
+            <textarea style="min-height: 200px; " matInput required>{{actor.biografia}}</textarea>
           </mat-form-field>
           <mat-form-field class="w-full">
             <mat-label>Trabajos</mat-label>
