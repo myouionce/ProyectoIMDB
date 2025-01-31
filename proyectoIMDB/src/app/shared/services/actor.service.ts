@@ -44,12 +44,12 @@ export class ActorService {
   }
 
   // api.get('/ActorsFiltered', ActorController.getActorByFilters);
-  // getSuggestions(term: string):Observable<Hero[]>{
-  //   return this.httpClient.get<Hero[]>(`${this.url}/heroes`)
-  //   .pipe(
-  //     map(heroes=>heroes.filter(heroe=>heroe.superhero.toLowerCase().includes(term.toLowerCase())))
-  //   );
-  // }
+  getActorsByFilter(term: string):Observable<Actor[]>{
+    return this.httpClient.get<Actor[]>(`${this.url}/Actors`)
+    .pipe(
+      map(actores=>actores.filter(actor=>actor.nombre.toLowerCase().includes(term.toLowerCase())))
+    );
+  }
 
   
 }

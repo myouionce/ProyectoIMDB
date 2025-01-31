@@ -13,7 +13,7 @@ export class MovieService {
     private httpClient: HttpClient
   ) { }
 
-  getActores(): Observable<Pelicula[]>{
+  getPeliculas(): Observable<Pelicula[]>{
     return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
   }
 
