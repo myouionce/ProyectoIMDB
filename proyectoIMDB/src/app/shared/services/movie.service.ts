@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Pelicula } from '../interfaces/imdb.interface';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,49 +13,40 @@ export class MovieService {
     private httpClient: HttpClient
   ) { }
 
-  getPeliculas(): Observable<Pelicula[]>{
+  getMovies(): Observable<Pelicula[]>{
     return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
   }
 
   // api.get('/Movies/:id', MovieController.getMovieById);
+  getMovieById(id: string):Observable<Pelicula | undefined>{
+    return this.httpClient.get<Pelicula>(`${this.url}/Movies/${id}`)
+    .pipe(
+      catchError(err => of(undefined))
+    );
+  }
+
   // api.put('/Movies/:id', MovieController.editMovieById);
-  // api.get('/MoviesFiltered', MovieController.getMovieByFilters);
+  updateMovie(pelicula:Pelicula): Observable<Pelicula>{
+    return this.httpClient.put<Pelicula>(`${this.url}/Movies/${pelicula.id}`,pelicula);
+  }
+  
+  // TODO Asegurarse de que funciona ese .delete
+  deleteMovieById(id: string): Observable<boolean>{
+    return this.httpClient.delete<boolean>(`${this.url}/Movies/${id}`)
+    .pipe(
+      map(resp => true),
+      catchError(err => of(false))
+    );
+  }
+
   // api.post('/saveMovie', MovieController.createMovie);
+  addMovie(pelicula:Pelicula):Observable<Pelicula>{
+    return this.httpClient.post<Pelicula>(`${this.url}/saveMovie`,pelicula);
+  }
 
-  // getHeroesById(id: string):Observable<Hero | undefined>{
-  //   return this.httpClient.get<Hero>(`${this.url}/heroes/${id}`)
-  //   .pipe(
-  //     catchError(err => of(undefined))
-  //   )
-  //   ;
-  // }
 
-  // updateHeroe(heroe:Hero): Observable<Hero>{
-  //   if(!heroe.id){
-  //     throw new Error('El id es necesario');
-  //   }
-  //   return this.httpClient.patch<Hero>(`${this.url}/heroes/${heroe.id}`,heroe);
-  // }
-
-  // deleteHeroById(id: string): Observable<boolean>{
-  //   return this.httpClient.delete<boolean>(`${this.url}/heroes/${id}`)
-  //   .pipe(
-  //     map(resp => true),
-  //     catchError(err => of(false))
-  //   );
-  // }
-
-  // addHeroe(heroe:Hero):Observable<Hero>{
-  //   if(!heroe.id){
-  //     heroe.id = heroe.publisher.split(' ')[0].toLowerCase() + '-' + heroe.superhero;
-  //   }
-  //   return this.httpClient.post<Hero>(`${this.url}/heroes`,heroe);
-  // }
-
-  // getSuggestions(term: string):Observable<Hero[]>{
-  //   return this.httpClient.get<Hero[]>(`${this.url}/heroes`)
-  //   .pipe(
-  //     map(heroes=>heroes.filter(heroe=>heroe.superhero.toLowerCase().includes(term.toLowerCase())))
-  //   );
-  // }
+  // TODO api.get('/MoviesFiltered', MovieController.getMovieByFilters);
+  getFilteredMovies(): Observable<Pelicula[]>{
+    return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
+  }
 }

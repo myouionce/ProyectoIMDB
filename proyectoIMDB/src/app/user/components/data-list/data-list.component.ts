@@ -1,3 +1,5 @@
+import { MovieService } from './../../../shared/services/movie.service';
+import { ActorService } from './../../../shared/services/actor.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Pelicula, Actor } from '../../../shared/interfaces/imdb.interface';
@@ -19,7 +21,8 @@ export class DataListComponent {
 
   
   constructor(
-    // private apiService: ApiService
+    private actorService: ActorService,
+    private movieService: MovieService,
     private route: ActivatedRoute
   ){}
 
@@ -31,15 +34,17 @@ export class DataListComponent {
       if (path.includes('actorlist')) {
         this.fillActorList();
         this.dataType = true;
+        // this.actorService.getActores()
+        //   .subscribe(actores  => this.data = actores);
       } else if (path.includes('movielist')) {
         this.fillMovieList();
         this.dataType = false;
+        // this.movieService.getMovies()
+        //   .subscribe(movies => this.data = movies);
       }
     });
 
 
-    // this.HeroeService.getHeroes()
-    // .subscribe(heroes  => this.heroes = heroes);
   }
 
   fillActorList(): void {

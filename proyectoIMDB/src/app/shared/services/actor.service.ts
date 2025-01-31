@@ -25,7 +25,7 @@ export class ActorService {
   }
 
   // api.put('/Actors/:id', ActorController.editActorById);
-  updateHeroe(actor:Actor): Observable<Actor>{
+  updateActor(actor:Actor): Observable<Actor>{
     return this.httpClient.put<Actor>(`${this.url}/Actors/${actor._id.$oid}`,actor);
   }
 
