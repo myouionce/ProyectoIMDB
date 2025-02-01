@@ -111,7 +111,7 @@
                 <h1>No hay fotos para mostrar</h1> 
               </div>           
               <div class="flex justify-content-center ">
-                <button mat-flat-button class="text-3xl">+</button>
+                <mat-icon class=" text-3xl pb-1 px-1">add_circle</mat-icon>
               </div>
               
             </div>
@@ -166,7 +166,7 @@
               </mat-form-field>
           
               @for (actor of actores_filtrados; track actor) {
-                <mat-option [value]="actor.nombre">{{actor.nombre}}</mat-option>
+                <mat-option [value]="actor">{{actor.nombre}}</mat-option>
               }
             </mat-select>
           </mat-form-field>

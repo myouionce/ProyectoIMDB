@@ -155,6 +155,7 @@ export class MovieComponent {
       this.setMovieData(movie);
       return;
     }
+    movie.fotosExtra = movie.fotosExtra.filter(foto => foto!= movie.portada);
     this.movie = movie;
   }
  

@@ -164,7 +164,7 @@ export class ActorComponent {
       biografia: "Robert Thomas Pattinson es un actor, productor y músico británico. Nació en Londres, Inglaterra, el 13 de mayo de 1986. Saltó a la fama mundial por su papel de Edward Cullen en la saga de películas 'Crepúsculo' (Twilight), basada en los libros de Stephenie Meyer. A lo largo de su carrera, ha trabajado en una variedad de géneros, desde dramas independientes hasta grandes producciones de Hollywood. Además de su carrera actoral, Pattinson ha demostrado ser un talentoso músico, y ha estado involucrado en varios proyectos musicales. Ha recibido numerosos premios por su talento y se ha consolidado como uno de los actores más versátiles de su generación.",
       fotoPrincipal: 'https://m.media-amazon.com/images/M/MV5BNzk0MDQ5OTUxMV5BMl5BanBnXkFtZTcwMDM5ODk5Mg@@._V1_FMjpg_UX1000_.jpg',
       fotosExtra: ["https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
-                "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
+                "https://m.media-amazon.com/images/M/MV5BNzk0MDQ5OTUxMV5BMl5BanBnXkFtZTcwMDM5ODk5Mg@@._V1_FMjpg_UX1000_.jpg",
                 "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
                 "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
                 "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg"
@@ -179,6 +179,7 @@ export class ActorComponent {
       
       return;
     }
+    actor.fotosExtra = actor.fotosExtra.filter(foto => foto!= actor.fotoPrincipal);
     this.actor = actor;
   }
   addImg(urlImg:string){
