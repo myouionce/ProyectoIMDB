@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import { Pelicula } from '../../interfaces/imdb.interface';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-movie',
@@ -23,16 +24,20 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 export class MovieComponent {
 
   public movieMode: 'view' | 'edit' | 'add' = 'view';
-  public movie : Pelicula = {
+
+  movieForm!: FormGroup;
+
+  public movie = {
     id: 0,
     titulo: '',
     descripcion: '',
-    genero: [],
+    genero: [''],
     director: '',
     lanzamiento: 0,
     calificacion: 0,
     portada: '',
-    fotosExtra: []
+    fotosExtra: [''],
+    reparto: [{}]
   }
 
   //----------------------------------------------------
@@ -75,12 +80,11 @@ export class MovieComponent {
       foto: 'https://upload.wikimedia.org/wikipedia/commons/4/43/John_David_Washington_in_2024.jpg'
     }
   ]
+  //getgeneros()
   public generos = ['Acción', 'Crimen', 'Drama', 'Terror'];
 
   //------------------------------------------------------------
 
-  public movieGenders = new FormControl(['']);
-  public reparto = new FormControl(['']);
   
   public filtro: string = ''; 
   public actores_filtrados = [...this.actores_data];
@@ -94,8 +98,11 @@ export class MovieComponent {
 
 
   constructor(
+    private formBuilder:FormBuilder,
     private router: Router
-  ){}
+  ){
+    this.movieForm = this.createMovieForm();
+  }
 
   getStars(calificacion: number):string[]{
     const stars: string[] = [];
@@ -126,7 +133,7 @@ export class MovieComponent {
     }
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
-    this.movie = {
+    const movie = {
       id: 1,
       titulo: "The Dark Knight",
       descripcion: "Batman se enfrenta al Joker, un criminal psicópata cuyo objetivo es sumergir a Gotham City en el caos.",
@@ -137,13 +144,61 @@ export class MovieComponent {
       portada: 'https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg',
       fotosExtra: ['https://m.media-amazon.com/images/M/MV5BMjIzMGU0MDQtNDcyOS00MmEyLTg3MWMtODE4YWI1ZGZlMTllXkEyXkFqcGc@._V1_.jpg',
         'https://m.media-amazon.com/images/M/MV5BMjIzMGU0MDQtNDcyOS00MmEyLTg3MWMtODE4YWI1ZGZlMTllXkEyXkFqcGc@._V1_.jpg'
-        ]
+        ],
+      reparto: this.actores_data
+
     };
     //------------------------------------------------------
-    this.movieGenders.setValue(this.movie.genero);
+    
     if(!this.router.url.includes('user')){
       this.movieMode = 'edit';
+      this.setMovieData(movie);
+      return;
     }
+    this.movie = movie;
+  }
+ 
+  addImg(urlImg:string){
+    let fotos = this.movieForm.value.fotosExtra;
+    fotos[0] === ''?fotos[0] = urlImg:fotos.push(urlImg);
+    console.log(fotos);
+    this.movieForm.patchValue({fotosExtra:fotos});
+  }
+
+  deleteImg(i:number){
+    let fotos = this.movieForm.value.fotosExtra;
+    fotos.splice(i,1);
+    this.movieForm.patchValue({fotosExtra:fotos});
+  }
+
+  createMovieForm(): FormGroup{
+    return this.formBuilder.group({
+      titulo:[this.movie.titulo, [Validators.required]],
+      lanzamiento:[this.movie.lanzamiento, [Validators.required]],
+      descripcion: [this.movie.descripcion, [Validators.required]],
+      genero: [this.movie.genero, [Validators.required]],
+      director: [this.movie.director, [Validators.required]],
+      calificacion: [this.movie.calificacion, [Validators.required]],
+      portada: [this.movie.portada],
+      fotosExtra: [this.movie.fotosExtra],
+      reparto: [this.movie.reparto]
+    });
   }
   
+
+  setMovieData(movie:any):void{
+    if(this.movieForm){
+      this.movieForm.patchValue({
+      titulo: movie.titulo || '',
+      lanzamiento: movie.lanzamiento || 0,
+      descripcion: movie.descripcion || '',
+      genero: movie.genero || [],
+      director: movie.director || '',
+      calificacion: movie.calificacion  || 0,
+      portada: movie.portada || '',
+      fotosExtra: movie.fotosExtra || [],
+      reparto: movie.reparto || [],
+      });
+    }
+  }
 }
