@@ -22,6 +22,6 @@ import { RouterModule } from '@angular/router';
 export class LayoutUserPageComponent {
   public sidebarItems = [
     {label: 'Peliculas', icon: 'movie', url:'./movielist'},
-    {label: 'Actores', icon: 'add', url:'./actorlist'}
+    {label: 'Actores', icon: 'group', url:'./actorlist'}
   ]
 }
