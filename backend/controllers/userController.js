@@ -2,6 +2,17 @@ var user = require('../models/user');
 
 const userCtrl ={};
 
+/**
+ * @description Valida las credenciales de un usuario
+ * @route GET /validateUser/:email/:password
+ * @param {string} email - Correo electrónico del usuario
+ * @param {string} password - Contraseña del usuario
+ * @returns {Object} 200 - Usuario autenticado correctamente
+ * @returns {Error} 401 - Contraseña incorrecta
+ * @returns {Error} 404 - El usuario no existe
+ * @returns {Error} 500 - Error al validar el usuario
+ */
+
 userCtrl.ValidateUser = async (req, res) => {
     try {
         const userEmail = req.params.email;
@@ -26,15 +37,28 @@ userCtrl.ValidateUser = async (req, res) => {
         return res.status(500).send({ message: 'Error al obtener las películas' });
     }
 }
-
+/**
+ * @description Crea un nuevo usuario
+ * @route POST /createUser
+ * @param {Object} req.body - Datos del usuario a crear
+ * @param {string} req.body.name - Nombre del usuario
+ * @param {string} req.body.correo - Correo electrónico del usuario
+ * @param {string} req.body.contrasena - Contraseña del usuario
+ * @returns {Object} 201 - Usuario creado correctamente
+ * @returns {Error} 500 - Error al crear el usuario
+ */
 userCtrl.createUser = async (req, res) => {
     try {
         const { name, correo, contrasena } = req.body;
-        const newUser = new user({ name, correo, contrasena });
+        const userExists = await user.findOne({ correo });
 
+        if (userExists) {
+            return res.status(400).send({ message: 'El usuario ya existe' });
+        }
+
+        const newUser = new user({ name, correo, contrasena });
         newUser.contrasena = await newUser.encrypPassword(contrasena); // Encriptar la contraseña
 
-        
         await newUser.save();
         return res.status(201).send({ message: 'Usuario creado correctamente' });
     } catch (err) {
