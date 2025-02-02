@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule, Router } from '@angular/router';
 import { User } from '../../shared/interfaces/imdb.interface';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-sign',
@@ -22,7 +23,7 @@ import { User } from '../../shared/interfaces/imdb.interface';
 export class SignComponent {
   signInForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private userService: UserService) {
     this.signInForm = this.fb.group({
       // TODO: LIMPIAR INFO ''
       name: ['Sharon', Validators.required],
@@ -30,13 +31,19 @@ export class SignComponent {
       contrasena: ['pass', Validators.required]
     });
   }
-
+  texto: string = '';
   onSubmit() {
     if (this.signInForm.valid) {
       const user: User = this.signInForm.value;
-      console.log('Usuario:', user);
-      // Aquí podrías llamar a un servicio para enviar los datos al backend.
-      this.router.navigate(['/user']);
+      this.userService.saveUser(user).subscribe(response => {
+        if(response){
+          this.router.navigate(['/user']);
+        }
+        else{
+          this.texto = 'El usuario ya existe';
+        }
+      });
+      
     }
   }
 }

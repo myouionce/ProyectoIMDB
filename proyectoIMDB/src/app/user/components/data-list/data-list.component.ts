@@ -8,16 +8,21 @@ import { ActivatedRoute } from '@angular/router';
 import { ActorCardComponent } from "../actor-card/actor-card.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-data-list',
-  imports: [CommonModule, MovieCardComponent, ActorCardComponent, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MovieCardComponent, ActorCardComponent, MatButtonModule, MatIconModule, MatInputModule,
+    MatFormFieldModule, ReactiveFormsModule],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss'
 })
 export class DataListComponent {
   public dataType: boolean = false;
   public data: any[] = [];
+  public searchInput = new FormControl();
 
   
   constructor(
@@ -46,6 +51,13 @@ export class DataListComponent {
     });
 
 
+  }
+
+  searchActor(): void{
+    const value: string = this.searchInput.value || '';
+
+    this.actorService.getActorsByFilter(value)
+      .subscribe( actores => this.data = actores );
   }
 
   currentPage = 1;

@@ -24,13 +24,17 @@
             </mat-form-field>
           </div>
           <div class="flex justify-content-evenly w-full my-5">
-            <button mat-stroked-button [routerLink]="'/login'">Volver</button>
-          </div>
-          <div class="flex justify-content-evenly w-full my-5">
+            <button mat-flat-button [routerLink]="'/login'">Volver</button>
+          
             <button mat-stroked-button type="submit" [disabled]="signInForm.invalid">Sign In</button>
           </div>
         </form>
       </mat-card-content>
+      
+      <p style="color: red; font-weight:500;">
+        {{texto}}
+      </p>
+
     </mat-card>
   </div>
   

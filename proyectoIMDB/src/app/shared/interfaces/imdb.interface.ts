@@ -33,3 +33,9 @@ export interface User {
   correo:     string;
   contrasena: string;
 }
+
+export interface AuthResponse {
+  message: string;
+  flag: boolean;
+  rol?: number;
+}

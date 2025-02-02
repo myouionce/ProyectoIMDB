@@ -9,6 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -23,21 +24,30 @@ export class LoginComponent {
   userForm!: FormGroup;
 
 
-  constructor(private formBd: FormBuilder, private router: Router) {
+  constructor(private formBd: FormBuilder, private router: Router, private userService: UserService) {
     this.userForm = this.formBd.group({
-      // TODO: LIMPIAR INFO
-      correo: ['shaOrtiz123@gmail.com', [Validators.required, Validators.email]],
-      contrasena: ['88088088', Validators.required]
+      correo: ['cherrymotion@gmail.com', [Validators.required, Validators.email]],
+      contrasena: ['pass123', Validators.required]
     });
   }
-
-  onSubmit() {
+  texto: string = '';
+  submit() {
     if (this.userForm.valid) {
-      const user: User = this.userForm.value;
-      console.log('Usuario:', user);
-      // Aquí podrías llamar a un servicio para enviar los datos al backend.
-      this.router.navigate(['/admin']);
+      const { correo, contrasena } = this.userForm.value; 
+      this.userService.authUser(correo, contrasena).subscribe(response => {
+        if(response){
+          if (response.rol === 1) { // Si rol es 1, redirigir a admin
+            this.router.navigate(['/admin']);
+          } else { // Si no es admin, redirigir a user
+            this.router.navigate(['/user']);
+          }
+        }
+        else{
+          this.texto = 'Credenciales inválidas, por favor intente nuevamente';
+        }
+      });
     }
   }
+  
 
 }
