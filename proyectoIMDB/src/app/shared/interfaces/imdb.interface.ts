@@ -27,3 +27,9 @@ export interface Actor {
 export interface ID {
   $oid: string;
 }
+
+export interface User {
+  name:       string;
+  correo:     string;
+  contrasena: string;
+}
