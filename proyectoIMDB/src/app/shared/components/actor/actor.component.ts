@@ -80,6 +80,7 @@ export class ActorComponent {
           this.trabajos = pelis;
           this.setActorData({ ...this.actor, trabajos: this.trabajos });
 
+
         },
         error => {
           if (error.status === 404) {

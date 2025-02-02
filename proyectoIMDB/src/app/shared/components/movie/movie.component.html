@@ -11,9 +11,7 @@
         <mat-card-content>
           <hr>
           <div class="flex justify-content-around w-full overflow-x-auto quitarContainer">
-            <div class="flex flex-column align-items-center mt-3 mx-3 sm:w-7 md:w-6 xl:w-5">
-              <img [src]="movie.portada" alt="" mat-card-image class="shadow-4 w-full mb-3">
-            </div>
+            
             @for (photo of movie.fotosExtra; track $index; ) {
               <div class="flex flex-column align-items-center mt-3 mx-3 sm:w-7 md:w-6 xl:w-5">
                 <img [src]="photo" mat-card-image class="w-full shadow-4">
@@ -47,12 +45,12 @@
 
             <div class="ml-4 py-2 flex justify-content-around w-full overflow-x-auto quitarContainer" >
             
-            @for (actor of actores_data; track $index; ) {
+            @for (actor of movieReparto; track $index; ) {
               <div class="shadow-1 pt-3 flex flex-column align-items-center mx-4 mt-3 sm:w-7 md:w-6 xl:w-5 ">
-                <img [src]="actor.foto" mat-card-lg-image class="w-auto shadow-3 border-circle ">
+                <img [src]="actor.fotoPrincipal" mat-card-lg-image class="w-auto shadow-3 border-circle ">
                 <div class="flex justify-content-around mx-5 mt-2 w-full">
                   <span class="text-sm">{{actor.nombre}}</span>
-                  <span class="text-sm font-light">{{actor.fecha_de_nacimiento.split('-')[0]}}</span>
+                  <span class="text-sm font-light">{{actor.nacimiento ? actor.nacimiento.split('T')[0]:actor.nacimiento}}</span>
                 </div>
               </div>
               
@@ -170,6 +168,9 @@
               }
             </mat-select>
           </mat-form-field>
+          <div class="flex w-full justify-content-center my-4">
+            <button mat-fab extended class="px-5 text-lg" ><mat-icon>save</mat-icon>Guardar</button>
+          </div>
         </mat-card-content>
       </mat-card>
     </form>
