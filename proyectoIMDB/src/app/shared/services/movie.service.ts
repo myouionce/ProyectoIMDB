@@ -52,4 +52,14 @@ export class MovieService {
   getFilteredMovies(): Observable<Pelicula[]>{
     return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
   }
+  //api.get('/getTrabajos',MovieController.getTrabajos);
+  getTrabajos(id:string):Observable<Pelicula[]>{
+    return this.httpClient.get<{peliculas: Pelicula[]}>(`${this.url}/getTrabajos/${id}`)
+    .pipe(
+      map(response => response.peliculas)
+    )
+  }
+
+  
+  
 }

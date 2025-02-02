@@ -42,6 +42,8 @@ export class MovieComponent {
 
   //----------------------------------------------------
   //definir la lista de actores con getReparto y id de la pelicula
+  
+
   public actores_data = [
     {
       nombre: "Robert Pattinson",
@@ -133,6 +135,8 @@ export class MovieComponent {
     }
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
+    
+
     const movie = {
       id: 1,
       titulo: "The Dark Knight",

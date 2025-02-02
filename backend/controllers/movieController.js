@@ -42,16 +42,16 @@ movieCtrl.getTrabajos = async (req, res) => {
         }
 
         const peliculas = [];
-        trabajos.forEach(async (movie) => {
+        for (const movie of trabajos) {
             const trabajo = await Movie.findById(movie.idPelicula);
             if (trabajo) {
                 peliculas.push(trabajo);
             }
-        });
+        }
 
         return res.status(200).send({ peliculas });
     } catch (err) {
-        return res.status(500).send({ message: 'Error al obtener los actores' });
+        return res.status(500).send({ message: 'Error al obtener los trabajos' });
     }
 }
 
