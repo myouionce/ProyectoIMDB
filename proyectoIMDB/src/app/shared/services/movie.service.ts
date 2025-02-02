@@ -37,7 +37,7 @@ export class MovieService {
   
   // TODO Asegurarse de que funciona ese .delete
   deleteMovieById(id: string): Observable<boolean>{
-    return this.httpClient.delete<boolean>(`${this.url}/Movies/${id}`)
+    return this.httpClient.delete<boolean>(`${this.url}/deleteMovie/${id}`)
     .pipe(
       map(resp => true),
       catchError(err => of(false))

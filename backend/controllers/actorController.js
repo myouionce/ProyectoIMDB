@@ -170,5 +170,56 @@ actorCtrl.deleteActor = async (req, res) => {
         return res.status(500).send({ message: 'Error al eliminar el actor' });
     }
 }
+/**
+ * @description Agrega películas a actor
+ * @route POST /addActorMovie
+ * @param {string} idActor - ID del actor
+ * @param {Array} listaPeliculas - Lista de IDs de películas a agregar
+ * @returns {Object} 200 - Películas agregadas al actor
+ * @returns {Error} 400 - Película ya relacionada con el actor
+ * @returns {Error} 500 - Error al agregar películas al actor
+ */
+actorCtrl.addAMovieActor = async (req, res) => {
+    try {
+        const { idActor, listaPeliculas } = req.body;
 
+        for (const idPelicula of listaPeliculas) {
+            const existingRelation = await actorXmovie.findOne({ idPelicula, idActor });
+            if (existingRelation) {
+                return res.status(400).send({ message: `La película con ID: ${idPelicula} ya está relacionada con el actor` });
+            }
+
+            const newActorXMovie = new actorXmovie({ idPelicula, idActor });
+            await newActorXMovie.save();
+        }
+
+        return res.status(200).send({ message: 'Películas agregadas al actor correctamente' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: 'Error al agregar películas al actor' });
+    }
+}
+
+/**
+ * @description Borrar películas de un actor
+ * @route DELETE /deleteActorMovies
+ * @param {string} idActor - ID del actor
+ * @param {Array} listaPeliculas - Lista de IDs de películas a eliminar
+ * @returns {Object} 200 - Películas eliminadas del actor
+ * @returns {Error} 500 - Error al eliminar películas del actor
+ */
+actorCtrl.deleteMovieActor = async (req, res) => {
+    try {
+        const { idActor, listaPeliculas } = req.body;
+
+        for (const idPelicula of listaPeliculas) {
+            await actorXmovie.findOneAndDelete({ idPelicula, idActor });
+        }
+
+        return res.status(200).send({ message: 'Películas eliminadas del actor correctamente' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: 'Error al eliminar películas del actor' });
+    }
+}
 module.exports = actorCtrl;
