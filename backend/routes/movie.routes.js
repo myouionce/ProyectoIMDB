@@ -9,7 +9,7 @@ var api = express.Router();
 api.get('/Movies', MovieController.getMovies); //ruta para recuperar todas la peliculas
 api.get('/Movies/:id', MovieController.getMovieById);// ruta para recuperar la informacion de una sola pelicula por Id
 api.get('/MoviesFiltered', MovieController.getMovieByFilters);// ruta confiltrados
-api.get('/getTrabajos/:id',MovieController.getTrabajos);
+api.get('/getTrabajos/:id', MovieController.getTrabajos);
 
 //Metodos post
 api.post('/saveMovie', MovieController.createMovie);// ruta que guarda una nueva pelicula

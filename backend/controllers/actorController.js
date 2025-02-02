@@ -37,9 +37,9 @@ actorCtrl.getActors = async (req, res) => {
 actorCtrl.getReparto = async (req, res) => {
     try {
         const movieId = req.params.id;
-        
+
         const repartoX = await actorXmovie.find({ "idPelicula": movieId });
-        
+
         if (!repartoX || repartoX.length === 0) {
             return res.status(404).send({ message: 'No se encontraron actores' });
         }
@@ -51,7 +51,7 @@ actorCtrl.getReparto = async (req, res) => {
                 actores.push(actor);
             }
         }
-        
+
         return res.status(200).send({ actores });
     } catch (err) {
         return res.status(500).send({ message: 'Error al obtener los actores' });

@@ -19,7 +19,7 @@ api.post('/addActorMovie', ActorController.addAMovieActor); // Ruta que vincula 
 api.put('/Actors/:id', ActorController.editActorById);
 
 // Métodos DELETE
-api.delete('/deleteActor', ActorController.deleteActor);
+api.delete('/deleteActor/:id', ActorController.deleteActor);
 api.delete('/deleteActorMovies', ActorController.deleteMovieActor); // Ruta que borra la relación entre películas y un actor
 
 
