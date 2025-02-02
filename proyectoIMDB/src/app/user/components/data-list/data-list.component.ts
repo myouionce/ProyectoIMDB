@@ -37,7 +37,11 @@ export class DataListComponent {
       } else if (path.includes('movielist')) {
         this.dataType = false;
         this.movieService.getMovies()
-          .subscribe(movies => this.data = movies);
+          .subscribe(movies => {
+            this.data = movies;
+            console.log(movies);
+          });
+        
       }
     });
 

@@ -29,7 +29,7 @@ export class MovieService {
 
   // api.put('/Movies/:id', MovieController.editMovieById);
   updateMovie(pelicula:Pelicula): Observable<Pelicula>{
-    return this.httpClient.put<Pelicula>(`${this.url}/Movies/${pelicula.id}`,pelicula);
+    return this.httpClient.put<Pelicula>(`${this.url}/Movies/${pelicula._id}`,pelicula);
   }
   
   // TODO Asegurarse de que funciona ese .delete
