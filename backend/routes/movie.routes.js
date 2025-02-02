@@ -13,6 +13,7 @@ api.get('/getTrabajos/:id', MovieController.getTrabajos);
 
 //Metodos post
 api.post('/saveMovie', MovieController.createMovie);// ruta que guarda una nueva pelicula
+api.post('/deleteActorsMovie', MovieController.deleteActorMovie);//ruta que borra la relacion entre peliculas y actores
 
 //Metodos put
 api.put('/Movies/:id', MovieController.editMovieById);// ruta que modifica una pelicula
@@ -20,7 +21,6 @@ api.put('/addActorsMovie', MovieController.addActorMovie);//ruta que vincula act
 
 //Metodos delete
 api.delete('/deleteMovie/:id', MovieController.deleteMovieById);//ruta que borra pelicualas del catalogo
-api.delete('/deleteActorsMovie', MovieController.deleteActorMovie);//ruta que borra la relacion entre peliculas y actores
 
 
 

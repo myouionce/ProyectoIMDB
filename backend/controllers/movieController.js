@@ -232,7 +232,7 @@ movieCtrl.addActorMovie = async (req, res) => {
 movieCtrl.deleteActorMovie = async (req, res) => {
     try {
         const { idPelicula, listaActor } = req.body;
-        console.log("repartoB:", listaActor);
+       
 
         for (const actor of listaActor) {
 
