@@ -9,8 +9,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterModule, Router } from '@angular/router';
-import { Actor } from '../../interfaces/imdb.interface';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Actor,Pelicula } from '../../interfaces/imdb.interface';
+import { MovieService } from './../../../shared/services/movie.service';
+import { ActorService } from './../../../shared/services/actor.service';
+import { switchMap } from 'rxjs';
+
 
 @Component({
   selector: 'app-actor',
@@ -144,7 +148,10 @@ export class ActorComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private actorService: ActorService,
+    private movieService: MovieService,
+    private activatedRouter: ActivatedRoute
   ){
     this.actorForm = this.createActorForm();
   }
@@ -158,21 +165,37 @@ export class ActorComponent {
     }
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
+
+    let dataActor!:Actor;
+    this.activatedRouter.params
+    .pipe(
+      switchMap(({id})=> this.actorService.getActorsById(id)))
+      .subscribe(actor => {
+        if(!actor){
+          return this.router.navigateByUrl('/');
+        }
+        dataActor = actor;
+        return;
+      })
+    let works! :Pelicula[]
+    this.activatedRouter.params
+    .pipe(
+      switchMap(({id})=> this.movieService.getTrabajos(id)))
+      .subscribe(pelis => {
+        if(!pelis){
+          return this.router.navigateByUrl('/');
+        }
+        works = pelis;
+        return;
+      })
     const actor = {
-      nombre: "Robert Pattinson",
-      nacimiento: "1986-05-13",
-      biografia: "Robert Thomas Pattinson es un actor, productor y músico británico. Nació en Londres, Inglaterra, el 13 de mayo de 1986. Saltó a la fama mundial por su papel de Edward Cullen en la saga de películas 'Crepúsculo' (Twilight), basada en los libros de Stephenie Meyer. A lo largo de su carrera, ha trabajado en una variedad de géneros, desde dramas independientes hasta grandes producciones de Hollywood. Además de su carrera actoral, Pattinson ha demostrado ser un talentoso músico, y ha estado involucrado en varios proyectos musicales. Ha recibido numerosos premios por su talento y se ha consolidado como uno de los actores más versátiles de su generación.",
-      fotoPrincipal: 'https://m.media-amazon.com/images/M/MV5BNzk0MDQ5OTUxMV5BMl5BanBnXkFtZTcwMDM5ODk5Mg@@._V1_FMjpg_UX1000_.jpg',
-      fotosExtra: ["https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
-                "https://m.media-amazon.com/images/M/MV5BNzk0MDQ5OTUxMV5BMl5BanBnXkFtZTcwMDM5ODk5Mg@@._V1_FMjpg_UX1000_.jpg",
-                "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
-                "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg",
-                "https://hips.hearstapps.com/hmg-prod/images/actor-robert-pattinson-attends-the-opening-ceremony-of-the-news-photo-1588147075.jpg"
-                  
-              ],
-      trabajos: this.peliculas_data
+      nombre: dataActor.nombre,
+      nacimiento: dataActor.nacimiento,
+      biografia: dataActor.biografia,
+      fotoPrincipal: dataActor.fotoPrincipal,
+      fotosExtra: dataActor.fotosExtra,
+      trabajos: works
     };
-    
     if(!this.router.url.includes('user')){
       this.actorMode = 'edit';
       this.setActorData(actor);

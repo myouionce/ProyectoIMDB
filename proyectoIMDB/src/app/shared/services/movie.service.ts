@@ -53,9 +53,9 @@ export class MovieService {
   }
   //api.get('/getTrabajos',MovieController.getTrabajos);
   getTrabajos(id:string):Observable<Pelicula[]>{
-    return this.httpClient.get<{actores: Pelicula[]}>(`${this.url}/getTrabajos/${id}`)
+    return this.httpClient.get<{peliculas: Pelicula[]}>(`${this.url}/getTrabajos/${id}`)
     .pipe(
-      map(response => response.actores)
+      map(response => response.peliculas)
     )
   }
 

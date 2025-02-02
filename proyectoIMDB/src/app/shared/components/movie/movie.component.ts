@@ -135,7 +135,7 @@ export class MovieComponent {
     }
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
-
+    
 
     const movie = {
       id: 1,

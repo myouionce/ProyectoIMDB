@@ -9,7 +9,7 @@ var api = express.Router();
 api.get('/Actors', ActorController.getActors);
 api.get('/Actors/:id', ActorController.getActorById);
 api.get('/ActorsFiltered', ActorController.getActorByFilters);
-api.get('/getReparto',ActorController.getReparto)
+api.get('/getReparto/:id',ActorController.getReparto)
 
 //Metodos POST
 api.post('/saveActor', ActorController.createActor);
