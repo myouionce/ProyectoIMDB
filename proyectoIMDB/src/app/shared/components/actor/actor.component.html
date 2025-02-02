@@ -142,7 +142,15 @@
               }
             </mat-select>
           </mat-form-field>
+          <div class="flex w-full justify-content-center my-4">
+            <button mat-fab extended class="px-5 text-lg" [disabled]="actorForm.invalid"
+            (click)="guardarActor()"
+            ><mat-icon>save</mat-icon>Guardar</button>
+          </div>
         </mat-card-content>
+        <p style="color: red; font-weight:500;">
+          {{texto}}
+        </p>
       </mat-card>
     </form>
   </div>
