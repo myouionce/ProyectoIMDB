@@ -120,4 +120,11 @@ export class MoviesTableComponent implements AfterViewInit{
       this._liveAnnouncer.announce('Sorting cleared');
     }
   }
+  deleteMovie(id:number){
+     
+     this.dataSource.data =this.dataSource.data.filter(peli=> peli.id != id);
+     
+     console.log(this.dataSource.data);
+     this.dataSource._updateChangeSubscription();
+  }
 }
