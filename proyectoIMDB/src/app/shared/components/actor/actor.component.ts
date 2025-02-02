@@ -14,7 +14,7 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Actor, Pelicula } from '../../interfaces/imdb.interface';
 import { MovieService } from './../../../shared/services/movie.service';
 import { ActorService } from './../../../shared/services/actor.service';
-import { switchMap } from 'rxjs';
+import { first, forkJoin, switchMap } from 'rxjs';
 
 
 @Component({
@@ -60,19 +60,43 @@ export class ActorComponent {
   }
 
   filtrarPeliculas(event: Event) {
+
     const texto = (event.target as HTMLInputElement).value.toLowerCase();
     this.peliculas_filtradas = this.peliculas_data.filter(peli =>
       peli.titulo.toLowerCase().includes(texto)
     );
   }
 
+  loadTrabajos(actorId: string): void {
+    this.movieService.getTrabajos(actorId)
+      .subscribe(
+        pelis => {
+          console.log(pelis);
+          if (!pelis) {
+            this.trabajos = [];
+            this.setActorData({ ...this.actor, trabajos: this.trabajos });
+            return;
+          }
+          this.trabajos = pelis;
+          this.setActorData({ ...this.actor, trabajos: this.trabajos });
 
+        },
+        error => {
+          if (error.status === 404) {
+            this.trabajos = [];
+            this.setActorData({ ...this.actor, trabajos: this.trabajos });
+          } else {
+            console.error('Error al obtener los trabajos:', error);
+          }
+        }
+      );
+  }
 
 
   ngOnInit(): void {
     if (this.router.url.includes('add-')) {
       this.actorMode = 'add';
-
+      this.loadPeliculas();
       return;
     }
     //-------------------------------------------------
@@ -81,39 +105,62 @@ export class ActorComponent {
     this.activatedRouter.params
       .pipe(
         switchMap(({ id }) => this.actorService.getActorsById(id)))
-      .subscribe(actor => {
-        console.log(actor);
-        if (!actor) {
-          return this.router.navigateByUrl('/');
+      .subscribe({
+        next: actor => {
+          console.log(actor);
+          if (!actor) {
+            this.router.navigateByUrl('/');
+            return;
+          }
+          this.actor = actor;
+          this.loadTrabajos(actor._id as unknown as string);
+        },
+        error: err => {
+          console.error('Error al obtener el actor:', err);
+          this.router.navigateByUrl('/');
         }
-        this.actor = actor;
-        return;
-      })
-    this.activatedRouter.params
-      .pipe(
-        switchMap(({ id }) => this.movieService.getTrabajos(id)))
-      .subscribe(pelis => {
-        if (!pelis) {
-          return this.router.navigateByUrl('/');
-        }
-        
-        this.trabajos = pelis;
-        return;
-      })
+      });
+
+      forkJoin({
+        trabajos1: this.activatedRouter.params.pipe(
+          first(),
+          switchMap(({ id }) => this.movieService.getTrabajos(id))
+        ),
+        peliculas1: this.movieService.getMovies()
+      }).subscribe(({ trabajos1, peliculas1 }) => {
+        this.peliculas_data = peliculas1;
+        this.peliculas_filtradas = [...peliculas1];
+  
+        this.trabajos = trabajos1;
+        this.setActorTrabajo(trabajos1);
+      });
+    
 
 
-      console.log(this.actor);
+
+
 
     if (!this.router.url.includes('user')) {
       this.actorMode = 'edit';
-      
-      this.setActorData({ ...this.actor, trabajos: this.trabajos });
+
 
       return;
     }
     this.actor.fotosExtra = this.actor.fotosExtra.filter(foto => foto != this.actor.fotoPrincipal);
-    
 
+
+  }
+  loadPeliculas(): void {
+    this.movieService.getMovies()
+      .subscribe(
+        peliculas => {
+          this.peliculas_data = peliculas;
+          this.peliculas_filtradas = [...this.peliculas_data];
+        },
+        error => {
+          console.error('Error al obtener las películas:', error);
+        }
+      );
   }
   addImg(urlImg: string) {
     let fotos = this.actorForm.value.fotosExtra;
@@ -140,17 +187,29 @@ export class ActorComponent {
   }
 
   setActorData(actor: any): void {
-    
+
     if (this.actorForm) {
-      
+
       this.actorForm.patchValue({
         nombre: actor.nombre || '',
         nacimiento: actor.nacimiento || '',
         biografia: actor.biografia || '',
         fotoPrincipal: actor.fotoPrincipal || '',
-        fotosExtra: actor.fotosExtra || [],
-        trabajos: actor.trabajos || []
+        fotosExtra: actor.fotosExtra || []
       });
     }
+  }
+
+  setActorTrabajo(trabajos: Pelicula[]): void {
+    if (this.actorForm) {
+        const trabajoValido = trabajos
+          .map(r => this.peliculas_filtradas.find(a => a._id === r._id)) // Busca coincidencias por ID
+          .filter(a => a); 
+  
+        this.actorForm.patchValue({
+          trabajos: trabajoValido
+        });
+  
+      }
   }
 }

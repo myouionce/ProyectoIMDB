@@ -1,7 +1,7 @@
 
 
 
-<div *ngIf="peliculas.length !== 0; else table" 
+<div *ngIf="dataSource.data && dataSource.data.length < 1;else table" 
     class="alert alert-warning text-center">
     No hay peliculas que mostrar
 </div>
