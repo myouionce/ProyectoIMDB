@@ -58,6 +58,13 @@ export class ActorService {
       map(actores=>actores.filter(actor=>actor.nombre.toLowerCase().includes(term.toLowerCase())))
     );
   }
+  // api.get('/getReparto', ActorController.getReparto);
+  getReparto(id:string):Observable<Actor[]>{
+    return this.httpClient.get<{actores: Actor[]}>(`${this.url}/getReparto/${id}`)
+    .pipe(
+      map(response => response.actores)
+    )
+  } 
 
   
 }
