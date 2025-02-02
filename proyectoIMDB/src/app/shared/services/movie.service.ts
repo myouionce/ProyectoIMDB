@@ -64,5 +64,23 @@ export class MovieService {
   }
 
 
+  addReparto(id:string,reparto:any[]):Observable<boolean>{
+    // console.log("reparto:",reparto);
+    return this.httpClient.post<boolean>(`${this.url}/addActorMovie`, {body:{idPelicula:id, listaActor:reparto}})
+    .pipe(
+      map(resp => true),
+      catchError(err => of(false))
+    )
+  }
+  
+  deleteReparto(id:string,reparto:any[]):Observable<boolean>{
+    // console.log("repartoAborrar:",reparto);
+    return this.httpClient.post<boolean>(`${this.url}/deleteActorsMovie`, { idPelicula: id, listaActor: reparto } )
+    .pipe(
+      map(resp => true),
+      catchError(err => of(false))
+    );
+  }
+  
 
 }

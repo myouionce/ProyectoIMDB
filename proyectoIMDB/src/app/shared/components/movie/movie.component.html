@@ -168,7 +168,7 @@
             </mat-select>
           </mat-form-field>
           <div class="flex w-full justify-content-center my-4">
-            <button mat-fab extended class="px-5 text-lg" [disabled]="movieForm.invalid"><mat-icon>save</mat-icon>Guardar</button>
+            <button mat-fab extended class="px-5 text-lg" (click)="onSubmit()" [disabled]="movieForm.invalid"><mat-icon>save</mat-icon>Guardar</button>
           </div>
         </mat-card-content>
       </mat-card>

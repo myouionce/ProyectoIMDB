@@ -203,7 +203,7 @@ movieCtrl.deleteMovieById = async (req, res) => {
 movieCtrl.addActorMovie = async (req, res) => {
     try {
         const { idPelicula, listaActor } = req.body;
-
+        
         for (const actor of listaActor) {
             const existingRelation = await actorXmovie.findOne({ idPelicula, idActor: actor._id });
             if (existingRelation) {
@@ -222,7 +222,7 @@ movieCtrl.addActorMovie = async (req, res) => {
 }
 /**
  * @description Borrar actores a una película
- * @route DELETE /deleteActorsMovie
+ * @route POST /deleteActorsMovie
  * @param {string} idPelicula - ID de la película
  * @param {Array} listaActor - Lista de actores a agregar
  * @returns {Object} 200 - Actores eliminados a la película
@@ -232,11 +232,12 @@ movieCtrl.addActorMovie = async (req, res) => {
 movieCtrl.deleteActorMovie = async (req, res) => {
     try {
         const { idPelicula, listaActor } = req.body;
+        console.log("repartoB:", listaActor);
 
         for (const actor of listaActor) {
 
 
-            await newActorXMovie.findOneAndDelete({ idPelicula, "idActor": actor._id });
+            await actorXmovie.findOneAndDelete({ idPelicula, idActor: actor._id });
         }
 
         return res.status(200).send({ message: 'Actores eliminados de la película correctamente' });
