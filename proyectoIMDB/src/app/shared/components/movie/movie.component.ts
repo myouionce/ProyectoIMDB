@@ -11,7 +11,7 @@ import { Actor, Pelicula } from '../../interfaces/imdb.interface';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { switchMap, timeout } from 'rxjs';
+import { first, forkJoin, switchMap, timeout } from 'rxjs';
 import { MovieService } from '../../services/movie.service';
 import { ActorService } from '../../services/actor.service';
 
@@ -99,7 +99,10 @@ export class MovieComponent {
       this.movieMode = 'add';
       this.generos = ['Accion', 'Terror', 'Drama']
       this.actorService.getActores().subscribe(
-        actores => this.actores_data = actores
+        actores => {this.actores_data = actores;
+          this.actores_filtrados = [...actores];
+        }
+
       )
       return;
     }
@@ -117,16 +120,22 @@ export class MovieComponent {
         this.setMovieData(peli);
         return;
       })
+
     
-    this.actorService.getActores().subscribe(
-      actores => {
-        this.movieReparto = actores; //user
-        this.setMovieRepartoData(actores);  //setear /edit       
-        //funcionamiento del filtro
-        this.actores_filtrados=[...actores]; 
-        this.actores_data = actores; 
-      }
-    )
+
+    forkJoin({
+      reparto1: this.activatedRouter.params.pipe(
+        first(),
+        switchMap(({ id }) => this.actorService.getReparto(id))
+      ),
+      actores1: this.actorService.getActores()
+    }).subscribe(({ reparto1, actores1 }) => {
+      this.actores_data = actores1;
+      this.actores_filtrados = [...actores1];
+    
+      this.movieReparto = reparto1;
+      this.setMovieRepartoData(reparto1);
+    });
     //reparto
     //------------------------------------------------------
     
@@ -153,7 +162,6 @@ export class MovieComponent {
   }
 
   createMovieForm(): FormGroup{
-    console.log(this.movie);
     return this.formBuilder.group({
       titulo:[this.movie.titulo, [Validators.required]],
       lanzamiento:[this.movie.lanzamiento, [Validators.required]],
@@ -182,11 +190,17 @@ export class MovieComponent {
       });
     }
   }
-  setMovieRepartoData(reparto:Actor[]):void{
-    if(this.movieForm){
+  
+  setMovieRepartoData(reparto: Actor[]): void {
+   if (this.movieForm) {
+      const repartoValido = reparto
+        .map(r => this.actores_filtrados.find(a => a._id === r._id)) // Busca coincidencias por ID
+        .filter(a => a); 
+
       this.movieForm.patchValue({
-        reparto:reparto || []
+        reparto: repartoValido
       });
+
     }
   }
 }

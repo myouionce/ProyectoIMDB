@@ -43,17 +43,16 @@
           <div class="ml-2 mb-3 px-2 w-10 xl:w-11">
             <h3>Reparto</h3>
 
-            <div class="ml-4 py-2 flex justify-content-around w-full overflow-x-auto quitarContainer" >
+            <div class="ml-4 py-2 flex justify-content-center w-full overflow-x-auto quitarContainer" >
             
             @for (actor of movieReparto; track $index; ) {
-              <div class="shadow-1 pt-3 flex flex-column align-items-center mx-4 mt-3 sm:w-7 md:w-6 xl:w-5 ">
+              <div class="shadow-1 pt-3 flex flex-column align-items-center mx-2 mt-3 sm:w-7 md:w-6 xl:w-3 ">
                 <img [src]="actor.fotoPrincipal" mat-card-lg-image class="w-auto shadow-3 border-circle ">
                 <div class="flex justify-content-around mx-5 mt-2 w-full">
                   <span class="text-sm">{{actor.nombre}}</span>
                   <span class="text-sm font-light">{{actor.nacimiento ? actor.nacimiento.split('T')[0]:actor.nacimiento}}</span>
                 </div>
               </div>
-              
             }
             </div>
           </div>
