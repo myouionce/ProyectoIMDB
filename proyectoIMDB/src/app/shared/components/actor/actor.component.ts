@@ -74,18 +74,18 @@ export class ActorComponent {
           
           if (!pelis) {
             this.trabajos = [];
-            this.setActorData({ ...this.actor, trabajos: this.trabajos });
+            this.setActorData(this.actor);
             return;
           }
           this.trabajos = pelis;
-          this.setActorData({ ...this.actor, trabajos: this.trabajos });
+          this.setActorData(this.actor);
 
 
         },
         error => {
           if (error.status === 404) {
             this.trabajos = [];
-            this.setActorData({ ...this.actor, trabajos: this.trabajos });
+            this.setActorData(this.actor);
           } else {
             console.error('Error al obtener los trabajos:', error);
           }

@@ -56,7 +56,7 @@
 
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef>Edit</th>
-      <td mat-cell *matCellDef="let element"><button mat-icon-button [routerLink]="['/admin/movie', element.titulo]"><mat-icon>edit</mat-icon></button></td>
+      <td mat-cell *matCellDef="let element"><button mat-icon-button [routerLink]="['/admin/movie', element._id]"><mat-icon>edit</mat-icon></button></td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
