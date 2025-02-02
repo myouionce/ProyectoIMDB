@@ -21,8 +21,8 @@ export class DataListComponent {
 
   
   constructor(
-    private actorService: ActorService,
-    private movieService: MovieService,
+    // private actorService: ActorService,
+    // private movieService: MovieService,
     private route: ActivatedRoute
   ){}
 
