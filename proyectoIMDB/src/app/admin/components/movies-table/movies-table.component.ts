@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatTableDataSource, MatTableModule} from '@angular/material/table'
 import { MatIconModule } from '@angular/material/icon';
@@ -101,17 +101,30 @@ export class MoviesTableComponent implements AfterViewInit{
   @Input()
   public peliculas: Pelicula[] = [];
 
-  dataSource = new MatTableDataSource<any>(this.peliculas_data);
+  dataSource = new MatTableDataSource<any>(this.peliculas);
   displayedColumns: string[] = ['titulo', 'descripcion',
     'genero', 'director', 'año' ,'calificacion','delete', 'edit'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator ;
   @ViewChild(MatSort) sort!: MatSort;
 
+  ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['peliculas']) {
+      this.dataSource.data = this.peliculas;
+      this.dataSource._updateChangeSubscription(); // Actualiza la tabla
+    }
+  }
+  
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  
 
   announceSortChange(sortState: Sort) {
     if (sortState.direction) {
