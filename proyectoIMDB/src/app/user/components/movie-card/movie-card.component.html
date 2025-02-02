@@ -1,1 +1,26 @@
-<p>movie-card works!</p>
+<mat-card >
+    <mat-card-header class="mb-2 ">
+        <div class="font-medium text-lg white-space-nowrap overflow-hidden text-overflow-ellipsis">
+            {{pelicula.titulo}}
+        </div>
+    </mat-card-header>
+    <img mat-card-xl-image class="w-full"  [src]="pelicula.portada" [alt]="pelicula.titulo" (error)="onImageError($event)">
+    <mat-card-content class="px-2 pb-2">
+        
+        <p class="mb-2"><strong>Calificación: </strong>{{pelicula.calificacion}}/10</p>
+        
+        <strong class="">Género:</strong>
+        <mat-chip-listbox>
+            <div class="quitarScroll flex overflow-x-auto w-full">
+                <mat-chip-option *ngFor="let genero of pelicula.genero">{{genero}}</mat-chip-option>
+            </div>
+        </mat-chip-listbox>
+        <mat-divider></mat-divider>
+    </mat-card-content>
+        <div class="flex justify-content-center my-2">
+            <button class="mb-2" mat-raised-button [routerLink]="['/user/movie/', pelicula.id]">
+                <mat-icon>info</mat-icon>
+                Ver más
+            </button>
+        </div>
+</mat-card>

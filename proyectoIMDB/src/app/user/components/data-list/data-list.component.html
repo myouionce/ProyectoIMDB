@@ -1,0 +1,24 @@
+@if(dataType){
+    <h1 class="text-3xl">Actores</h1>
+    <div class="grid grid-cols-4 pt-2 ">
+        @for (actor of paginatedData; track $index) {
+            <div class="col-12 sm:col-4 md:col-3 xl:col-2">
+                <app-actor-card [actor]="actor"></app-actor-card>
+            </div>
+        }
+    </div>
+}@else {
+    <h1 class="text-3xl">Películas</h1>
+    <div class="grid grid-cols-4 pt-2 ">
+        @for (pelicula of paginatedData; track $index) {
+            <div class="col-12 sm:col-4 md:col-3 xl:col-2">
+                <app-movie-card [pelicula]="pelicula"></app-movie-card>
+            </div>
+        }
+    </div>
+}
+<div class="flex align-items-center justify-content-center mt-4">
+    <button mat-mini-fab (click)="prevPage()" [disabled]="currentPage === 1"><mat-icon>arrow_back_ios</mat-icon></button>
+    <span style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="mx-3" >Página {{ currentPage }}</span>
+    <button mat-mini-fab (click)="nextPage()" [disabled]="currentPage >= totalPages"><mat-icon>arrow_forward_ios</mat-icon></button>
+</div>

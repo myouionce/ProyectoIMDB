@@ -1,1 +1,146 @@
-<p>actor works!</p>
+<div *ngIf="actorMode === 'view'; else administrador" class="my-5 mx-8 flex flex-row justify-content-between">
+  <div class="my-5 ml-5 flex justify-content-center w-full">
+      <mat-card class="w-full">
+        <div class="mx-3 mt-3 flex justify-content-between">
+          <mat-card-header class="flex justify-content-between w-full">
+            <mat-card-title class="text-3xl">{{actor.nombre}}</mat-card-title>
+            <img [src]="actor.fotoPrincipal" alt="" mat-card-md-image class="">
+            <mat-card-subtitle style="color:darkgrey" class="text-xl mt-1">{{actor.nacimiento}}</mat-card-subtitle>
+          </mat-card-header>
+        </div>
+        <mat-card-content>
+          <hr>
+          <div class="flex justify-content-center">
+
+            <div class="w-9 flex overflow-x-auto quitarContainer">
+              <!-- <div class="flex flex-column align-items-center mt-3 mx-3 sm:w-7 md:w-6 xl:w-5">
+                <img [src]="actor.foto" alt="" mat-card-xl-image class=" w-full shadow-4  mb-3">
+              </div> -->
+              <div class="flex align-items-center my-3 mx-3 sm:w-7 md:w-6 xl:w-5">
+              @for (photo of actor.fotosExtra; track $index; ) {
+                  <img [src]="photo" mat-card-xl-image class="xl:mx-2 shadow-4">
+                }
+              </div>
+            </div>
+          </div>
+          <hr>
+          
+          <div class="shadow-1 ml-2 mb-3 px-4 py-1 w-10">
+            <h3>Biografia:</h3>
+            <p>{{actor.biografia}}</p>
+          </div>
+
+          <hr>
+          <div class="ml-2 mb-3 px-2 w-10 xl:w-11 ">
+            <h3>Trabajos</h3>
+          
+            <div class="ml-4 py-2 flex justify-content-around w-full overflow-x-auto quitarContainer" >
+            
+            @for (peli of peliculas_data; track $index; ) {
+              <div class="shadow-1 pt-3 flex flex-column align-items-center mx-4 sm:w-7 md:w-6 xl:w-5 ">
+                <img [src]="peli.portada" mat-card-lg-image class="w-auto shadow-2">
+                <div class="flex justify-content-around mx-5 mt-2 w-full">
+                  <span class="text-sm">{{peli.titulo}}</span>
+                  <span class="text-sm font-light">{{peli.lanzamiento}}</span>
+                </div>
+              </div>
+            }
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+  </div>
+</div>
+<ng-template #administrador >
+  <div class="my-5 ml-5 flex justify-content-center">
+    <form class="w-8" [formGroup]="actorForm" >
+      <mat-card class=" mr-4">
+        <div class="mx-3 mt-3 flex justify-content-between">
+          <mat-form-field class="w-6">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" >
+          </mat-form-field>
+          <mat-form-field class="w-5">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput formControlName="nacimiento">
+          </mat-form-field>
+        </div>
+        <mat-card-content>
+          <div *ngIf="actorForm.value.fotoPrincipal !== ''; else fotoIndefinida"  class="pb-0 flex align-items-center">
+            <mat-form-field class="w-9">
+              <mat-label>Añadir imagen</mat-label>
+              <input matInput 
+                #imgInput
+                >
+            </mat-form-field>
+            <div class="w-3 mx-2 flex gap-2 align-items-center">
+              <button mat-flat-button class="mb-3 text-2xl" (click)="addImg(imgInput.value); imgInput.value=''">+</button>
+              <button mat-flat-button class="mb-3 text-sm font-light" (click)="actorForm.patchValue({fotoPrincipal:''})">Quitar foto principal</button>
+            </div>
+          </div>
+          <ng-template #fotoIndefinida>
+            <div class="flex align-items-center">
+              <mat-form-field class="w-11">
+                <mat-label>Añadir imagen</mat-label>
+                <input matInput 
+                  #imgInput
+                  >
+              </mat-form-field>
+              <div class="w-2 mx-2 flex justify-content-center align-items-center">
+                <button mat-flat-button class="mb-3 text-2xl" (click)="addImg(imgInput.value); imgInput.value=''">+</button>
+              </div>
+            </div>
+          </ng-template> 
+
+          <div *ngIf="(actorForm.value.fotosExtra[0]=== '' || actorForm.value.fotosExtra.length < 1 ) ; else fotos" class=" w-full flex justify-content-center">
+            <div class="shadow-3 pb-6 pt-4 w-max px-7 my-3">
+              <div class="flex justify-content-center">
+                <h1>No hay fotos para mostrar</h1> 
+              </div>           
+              <div class="flex justify-content-center ">
+                <mat-icon class=" text-3xl pb-1 px-1">add_circle</mat-icon>
+              </div>
+              
+            </div>
+            
+          </div>
+          <ng-template #fotos >
+            <div>
+            <mat-button-toggle-group formControlName="fotoPrincipal" class="flex justify-content-start overflow-x-auto quitarContainer shadow-none" [ngClass]="{'w-full':( actor.fotoPrincipal !== ''?1:0) + actor.fotosExtra.length < 2}"  appearance="legacy" name="fontStyle" aria-label="Font Style">
+                
+                @for (photo of actorForm.value.fotosExtra; track $index; ) {
+                  <div class="flex flex-column align-items-center m-3 sm:w-7 md:w-6 xl:w-5">
+                    <button (click)="deleteImg($index)" class="relative right-50 font-bold text-lg" mat-button>x</button>
+                    <mat-button-toggle [value]="photo"><img [src]="photo" mat-card-xl-image class=" shadow-4 mb-3"></mat-button-toggle>
+                  </div>
+                }
+              </mat-button-toggle-group>
+            </div>
+              
+
+          </ng-template>
+          
+          <mat-form-field class="w-full">
+            <mat-label>Biografia</mat-label>
+            <textarea style="min-height: 200px; " matInput formControlName="biografia"></textarea>
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Trabajos</mat-label>
+            <mat-select multiple formControlName="trabajos">
+              
+              <mat-form-field class="w-11 px-5">
+                <mat-label>Buscar pelicula...</mat-label>
+                <input matInput (keyup)="filtrarPeliculas($event)">
+              </mat-form-field>
+          
+              @for (peli of peliculas_filtradas; track peli) {
+                <mat-option [value]="peli">{{peli.titulo}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </div>
+</ng-template>
