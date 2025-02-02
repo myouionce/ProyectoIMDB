@@ -1,4 +1,5 @@
 var user = require('../models/user');
+var admin = require('../models/administration');
 
 const userCtrl ={};
 
@@ -17,21 +18,30 @@ userCtrl.ValidateUser = async (req, res) => {
     try {
         const userEmail = req.params.email;
         const userPass = req.params.password;
-        const userSearch = await user.findOne({correo:userEmail});
-
+        const adminSearch = await admin.findOne({correo:userEmail});
         
+
+        if (adminSearch) {
+            const isMatchAdmin = await adminSearch.matchPassword(userPass);
+            if (!isMatchAdmin) {
+                return res.status(401).send({ message: 'Contraseña o usuario  incorrecto',"flag":false});
+            }
+            return res.status(200).send({ message:"Login exitoso","flag":true,"rol":1});
+        }
+
+        const userSearch = await user.findOne({correo:userEmail});
         
         if (!userSearch) {
-            return res.status(404).send({ message: 'El usuario no existe' });
+            return res.status(404).send({ message: 'El usuario no existe',"flag":false});
         }
         
         const isMatch = await userSearch.matchPassword(userPass);
         
         if (!isMatch) {
-            return res.status(401).send({ message: 'Contraseña incorrecta' });
+            return res.status(401).send({ message: 'Contraseña o usuario  incorrecto',"flag":false });
         }
 
-        return res.status(200).send({ message: 'Usuario autenticado correctamente' });
+        return res.status(200).send({ message:"Login exitoso","flag":true,"rol":0});
     } catch (err) {
         console.log(err);
         return res.status(500).send({ message: 'Error al obtener las películas' });
@@ -57,6 +67,26 @@ userCtrl.createUser = async (req, res) => {
         }
 
         const newUser = new user({ name, correo, contrasena });
+        newUser.contrasena = await newUser.encrypPassword(contrasena); // Encriptar la contraseña
+
+        await newUser.save();
+        return res.status(201).send({ message: 'Usuario creado correctamente' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: 'Error al crear el usuario' });
+    }
+}
+
+userCtrl.createAdmin = async (req, res) => {
+    try {
+        const { name, correo, contrasena } = req.body;
+        const userExists = await admin.findOne({ correo });
+
+        if (userExists) {
+            return res.status(400).send({ message: 'El usuario ya existe' });
+        }
+
+        const newUser = new admin({ name, correo, contrasena });
         newUser.contrasena = await newUser.encrypPassword(contrasena); // Encriptar la contraseña
 
         await newUser.save();
