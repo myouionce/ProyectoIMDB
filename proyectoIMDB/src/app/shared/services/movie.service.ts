@@ -13,8 +13,8 @@ export class MovieService {
     private httpClient: HttpClient
   ) { }
 
-  getMovies(): Observable<Pelicula[]>{
-    return this.httpClient.get<{movies: Pelicula[]}>(`${this.url}/Movies`).pipe(
+  getMovies(): Observable<Pelicula[]> {
+    return this.httpClient.get<{ movies: Pelicula[] }>(`${this.url}/Movies`).pipe(
       map(response => response.movies),
       catchError(err => of([]))
 
@@ -22,46 +22,47 @@ export class MovieService {
   }
 
   // api.get('/Movies/:id', MovieController.getMovieById);
-  getMovieById(id: string):Observable<Pelicula | undefined>{
-    return this.httpClient.get<{movies: Pelicula}>(`${this.url}/Movies/${id}`)
-    .pipe(
-      map(res => res.movies),
-      catchError(err => of(undefined))
-    );
+  getMovieById(id: string): Observable<Pelicula | undefined> {
+    return this.httpClient.get<{ movies: Pelicula }>(`${this.url}/Movies/${id}`)
+      .pipe(
+        map(res => res.movies),
+        catchError(err => of(undefined))
+      );
   }
 
   // api.put('/Movies/:id', MovieController.editMovieById);
-  updateMovie(pelicula:Pelicula): Observable<Pelicula>{
-    return this.httpClient.put<Pelicula>(`${this.url}/Movies/${pelicula._id}`,pelicula);
+  updateMovie(pelicula: Pelicula): Observable<Pelicula> {
+    return this.httpClient.put<Pelicula>(`${this.url}/Movies/${pelicula._id}`, pelicula);
   }
-  
+
   // TODO Asegurarse de que funciona ese .delete
-  deleteMovieById(id: string): Observable<boolean>{
-    return this.httpClient.delete<boolean>(`${this.url}/Movies/${id}`)
-    .pipe(
-      map(resp => true),
-      catchError(err => of(false))
-    );
+  deleteMovieById(id: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.url}/deleteMovie/${id}`)
+      .pipe(
+        map(resp => true),
+        catchError(err => of(false))
+      );
   }
 
   // api.post('/saveMovie', MovieController.createMovie);
-  addMovie(pelicula:Pelicula):Observable<Pelicula>{
-    return this.httpClient.post<Pelicula>(`${this.url}/saveMovie`,pelicula);
+  addMovie(pelicula: Pelicula): Observable<Pelicula> {
+    return this.httpClient.post<Pelicula>(`${this.url}/saveMovie`, pelicula);
   }
 
 
   // TODO api.get('/MoviesFiltered', MovieController.getMovieByFilters);
-  getFilteredMovies(): Observable<Pelicula[]>{
+  getFilteredMovies(): Observable<Pelicula[]> {
     return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
   }
   //api.get('/getTrabajos',MovieController.getTrabajos);
-  getTrabajos(id:string):Observable<Pelicula[]>{
-    return this.httpClient.get<{peliculas: Pelicula[]}>(`${this.url}/getTrabajos/${id}`)
-    .pipe(
-      map(response => response.peliculas),
-      catchError(err => of([]))
-    )
+  getTrabajos(id: string): Observable<Pelicula[]> {
+    return this.httpClient.get<{ peliculas: Pelicula[] }>(`${this.url}/getTrabajos/${id}`)
+      .pipe(
+        map(response => response.peliculas),
+        catchError(err => of([]))
+      )
   }
+
 
   addReparto(id:string,reparto:any[]):Observable<boolean>{
     // console.log("reparto:",reparto);
@@ -81,4 +82,5 @@ export class MovieService {
     );
   }
   
+
 }

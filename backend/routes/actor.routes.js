@@ -5,20 +5,22 @@ var ActorController = require('../controllers/actorController');
 var api = express.Router();
 /*Rutas para el servicio de actores*/
 
-//Metodos GET
+// Métodos GET
 api.get('/Actors', ActorController.getActors);
 api.get('/Actors/:id', ActorController.getActorById);
 api.get('/ActorsFiltered', ActorController.getActorByFilters);
-api.get('/getReparto/:id',ActorController.getReparto)
+api.get('/getReparto/:id', ActorController.getReparto);
 
-//Metodos POST
+// Métodos POST
 api.post('/saveActor', ActorController.createActor);
+api.post('/addAMovieActor', ActorController.addAMovieActor); // Ruta que vincula películas con un actor
+api.post('/deleteMovieActor', ActorController.deleteMovieActor); // Ruta que borra la relación entre películas y un actor
 
-//Metodos PUT
+// Métodos PUT
 api.put('/Actors/:id', ActorController.editActorById);
 
-//Metodos DELETE
-api.delete('/deleteActor',ActorController.deleteActor);
+// Métodos DELETE
+api.delete('/deleteActor/:id', ActorController.deleteActor);
 
 
 module.exports = api;
