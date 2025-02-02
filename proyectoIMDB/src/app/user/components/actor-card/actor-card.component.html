@@ -1,1 +1,16 @@
-<p>actor-card works!</p>
+<mat-card>
+    <mat-card-header class="mb-2 ">
+        <div class="font-medium text-lg white-space-nowrap overflow-hidden text-overflow-ellipsis">
+            {{actor.nombre}}
+        </div>
+    </mat-card-header>
+    <img mat-card-xl-image class="w-full" [src]="actor.fotoPrincipal" [alt]="actor.nombre" (error)="onImageError($event)">
+    <mat-card-content class="px-2 py-2 ">
+    </mat-card-content>    
+    <div class="flex justify-content-center mb-2">
+        <button mat-raised-button color="primary" [routerLink]="['/user/actor/', actor._id.$oid]">
+            <mat-icon>info</mat-icon>
+            Ver más
+        </button>
+    </div>
+</mat-card>
