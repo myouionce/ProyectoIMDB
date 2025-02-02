@@ -24,6 +24,9 @@
             </mat-form-field>
           </div>
           <div class="flex justify-content-evenly w-full my-5">
+            <button mat-stroked-button [routerLink]="'/login'">Volver</button>
+          </div>
+          <div class="flex justify-content-evenly w-full my-5">
             <button mat-stroked-button type="submit" [disabled]="signInForm.invalid">Sign In</button>
           </div>
         </form>

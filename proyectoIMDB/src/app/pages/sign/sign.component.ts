@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { User } from '../../shared/interfaces/imdb.interface';
 
 @Component({
@@ -22,11 +22,12 @@ import { User } from '../../shared/interfaces/imdb.interface';
 export class SignComponent {
   signInForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.signInForm = this.fb.group({
-      name: ['', Validators.required],
-      correo: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required]
+      // TODO: LIMPIAR INFO ''
+      name: ['Sharon', Validators.required],
+      correo: ['usuarioshaOrtiz123@gmail.com', [Validators.required, Validators.email]],
+      contrasena: ['pass', Validators.required]
     });
   }
 
@@ -35,6 +36,7 @@ export class SignComponent {
       const user: User = this.signInForm.value;
       console.log('Usuario:', user);
       // Aquí podrías llamar a un servicio para enviar los datos al backend.
+      this.router.navigate(['/user']);
     }
   }
 }

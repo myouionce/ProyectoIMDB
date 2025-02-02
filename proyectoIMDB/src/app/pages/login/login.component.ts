@@ -1,3 +1,4 @@
+import { User } from './../../shared/interfaces/imdb.interface';
 import { Component } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -7,7 +8,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,47 +22,22 @@ import { RouterModule } from '@angular/router';
 export class LoginComponent {
   userForm!: FormGroup;
 
-  public user = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    contactMethod: '',
-    mensaje: ''
-  };
 
-  constructor(private formBd: FormBuilder) {
+  constructor(private formBd: FormBuilder, private router: Router) {
     this.userForm = this.formBd.group({
-      firstName: [this.user.firstName, [Validators.required]],
-      lastName: [this.user.lastName],
-      email: [this.user.email, [Validators.required, Validators.email]],
-      phone: [this.user.phone, [Validators.required]],
-      contactMethod: [this.user.contactMethod],
-      mensaje: [this.user.mensaje]
+      // TODO: LIMPIAR INFO
+      correo: ['shaOrtiz123@gmail.com', [Validators.required, Validators.email]],
+      contrasena: ['88088088', Validators.required]
     });
   }
 
-  ngOnInit(): void {
-    const user = {
-      firstName: 'Sharon',
-      lastName: 'Ortiz',
-      email: 'shaOrtiz123@gmail.com',
-      phone: '88088088',
-      contactMethod: 'email',
-      mensaje: 'Soy Sharon de Prueba'
-    };
-    this.setUserForm(user);
-  }
-
-  setUserForm(userData: any): void {
-    this.userForm.setValue({
-      firstName: userData.firstName || '',
-      lastName: userData.lastName || '',
-      email: userData.email || '',
-      phone: userData.phone || '',
-      contactMethod: userData.contactMethod || '',
-      mensaje: userData.mensaje || ''
-    });
+  onSubmit() {
+    if (this.userForm.valid) {
+      const user: User = this.userForm.value;
+      console.log('Usuario:', user);
+      // Aquí podrías llamar a un servicio para enviar los datos al backend.
+      this.router.navigate(['/admin']);
+    }
   }
 
 }
