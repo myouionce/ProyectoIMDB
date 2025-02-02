@@ -67,7 +67,7 @@ export class ActorComponent {
   }
 
 
-
+ 
 
   ngOnInit(): void {
     if (this.router.url.includes('add-')) {
