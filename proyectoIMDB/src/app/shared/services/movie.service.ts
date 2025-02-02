@@ -21,8 +21,9 @@ export class MovieService {
 
   // api.get('/Movies/:id', MovieController.getMovieById);
   getMovieById(id: string):Observable<Pelicula | undefined>{
-    return this.httpClient.get<Pelicula>(`${this.url}/Movies/${id}`)
+    return this.httpClient.get<{movies: Pelicula}>(`${this.url}/Movies/${id}`)
     .pipe(
+      map(res => res.movies),
       catchError(err => of(undefined))
     );
   }

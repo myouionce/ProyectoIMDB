@@ -4,7 +4,7 @@ export interface Pelicula {
   descripcion:  string;
   genero:       string[];
   director:     string;
-  lanzamiento:  number;
+  lanzamiento:  string;
   calificacion: number;
   portada:      string;
   fotosExtra:   string[];
