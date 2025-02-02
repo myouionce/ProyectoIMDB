@@ -26,8 +26,9 @@ export class ActorService {
   // }
 
   getActorsById(id: string):Observable<Actor | undefined>{
-    return this.httpClient.get<Actor>(`${this.url}/Actors/${id}`)
+    return this.httpClient.get<{actores:Actor}>(`${this.url}/Actors/${id}`)
     .pipe(
+      map(response => response.actores),
       catchError(err => of(undefined))
     );
   }

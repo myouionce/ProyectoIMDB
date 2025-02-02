@@ -36,12 +36,15 @@
           
             <div class="ml-4 py-2 flex justify-content-around w-full overflow-x-auto quitarContainer" >
             
-            @for (peli of peliculas_data; track $index; ) {
-              <div class="shadow-1 pt-3 flex flex-column align-items-center mx-4 sm:w-7 md:w-6 xl:w-5 ">
+            @for (peli of trabajos; track $index; ) {
+              <div class="shadow-1 pt-3 flex flex-column align-items-center mx-2 sm:w-7 md:w-6 xl:w-5 ">
                 <img [src]="peli.portada" mat-card-lg-image class="w-auto shadow-2">
-                <div class="flex justify-content-around mx-5 mt-2 w-full">
-                  <span class="text-sm">{{peli.titulo}}</span>
+                <div class="flex justify-content-center mx-3 mt-2 w-full">
+                  <span class="text-sm mr-2">{{peli.titulo}}</span>
+                  
                   <span class="text-sm font-light">{{peli.lanzamiento}}</span>
+                  
+                  
                 </div>
               </div>
             }
@@ -52,7 +55,7 @@
 
   </div>
 </div>
-<ng-template #administrador >
+<ng-template  #administrador >
   <div class="my-5 ml-5 flex justify-content-center">
     <form class="w-8" [formGroup]="actorForm" >
       <mat-card class=" mr-4">

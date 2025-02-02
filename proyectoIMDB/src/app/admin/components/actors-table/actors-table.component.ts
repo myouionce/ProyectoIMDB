@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatTableDataSource, MatTableModule} from '@angular/material/table'
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Actor } from '../../../shared/interfaces/imdb.interface';
 
 
 @Component({
@@ -76,13 +77,25 @@ export class ActorsTableComponent implements AfterViewInit {
   
 
   @Input()
-  public actores: any[] = [];
+  public actores: Actor[]=[];
 
-  dataSource = new MatTableDataSource<any>(this.actores_data);
+  dataSource = new MatTableDataSource<any>(this.actores);
   displayedColumns: string[] = ['nombre', 'fecha_de_nacimiento', 'biografia','delete', 'edit'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator ;
   @ViewChild(MatSort) sort!: MatSort;
+
+  ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['actores']) {
+      this.dataSource.data = this.actores;
+      this.dataSource._updateChangeSubscription(); // Actualiza la tabla
+    }
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
