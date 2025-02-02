@@ -71,7 +71,7 @@ export class ActorComponent {
     this.movieService.getTrabajos(actorId)
       .subscribe(
         pelis => {
-          console.log(pelis);
+          
           if (!pelis) {
             this.trabajos = [];
             this.setActorData({ ...this.actor, trabajos: this.trabajos });
@@ -107,7 +107,7 @@ export class ActorComponent {
         switchMap(({ id }) => this.actorService.getActorsById(id)))
       .subscribe({
         next: actor => {
-          console.log(actor);
+          
           if (!actor) {
             this.router.navigateByUrl('/');
             return;
@@ -165,7 +165,7 @@ export class ActorComponent {
   addImg(urlImg: string) {
     let fotos = this.actorForm.value.fotosExtra;
     fotos[0] === '' ? fotos[0] = urlImg : fotos.push(urlImg);
-    console.log(fotos);
+    
     this.actorForm.patchValue({ fotosExtra: fotos });
   }
 
