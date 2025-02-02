@@ -120,8 +120,8 @@ export class MovieComponent {
     
     this.actorService.getActores().subscribe(
       actores => {
-        //this.movieReparto = actores; //user
-        this.setMovieRepartoData([actores[0]]);  //setear /edit       
+        this.movieReparto = actores; //user
+        this.setMovieRepartoData(actores);  //setear /edit       
         //funcionamiento del filtro
         this.actores_filtrados=[...actores]; 
         this.actores_data = actores; 
