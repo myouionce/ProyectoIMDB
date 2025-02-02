@@ -14,7 +14,9 @@ export class MovieService {
   ) { }
 
   getMovies(): Observable<Pelicula[]>{
-    return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
+    return this.httpClient.get<{movies: Pelicula[]}>(`${this.url}/Movies`).pipe(
+      map(response => response.movies)
+    )
   }
 
   // api.get('/Movies/:id', MovieController.getMovieById);

@@ -14,8 +14,16 @@ export class ActorService {
   ) { }
 
   getActores(): Observable<Actor[]>{
-    return this.httpClient.get<Actor[]>(`${this.url}/Actors`)
+    return this.httpClient.get<{actores: Actor[]}>(`${this.url}/Actors`)
+    .pipe(
+      map(response => response.actores)
+    )
   }
+  // getActores(): Observable<Actor[]> {
+  //   return this.httpClient.get<{ actores: Actor[] }>(${this.url}/Actors).pipe(
+  //     map(response => response.actores) // Extrae solo la lista de actores
+  //   );
+  // }
 
   getActorsById(id: string):Observable<Actor | undefined>{
     return this.httpClient.get<Actor>(`${this.url}/Actors/${id}`)
