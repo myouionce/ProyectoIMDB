@@ -114,7 +114,12 @@ export class MovieComponent {
       switchMap(({id})=> this.movieService.getMovieById(id)))
       .subscribe(peli => {
         if(!peli){
-          return this.router.navigateByUrl('/');
+          if(this.router.url.includes('admin')){
+            return this.router.navigateByUrl('/admin');
+          }else{
+            return this.router.navigateByUrl('/user');
+          }
+          
         }
         this.movie = peli;
         this.setMovieData(peli);

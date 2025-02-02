@@ -15,7 +15,9 @@ export class MovieService {
 
   getMovies(): Observable<Pelicula[]>{
     return this.httpClient.get<{movies: Pelicula[]}>(`${this.url}/Movies`).pipe(
-      map(response => response.movies)
+      map(response => response.movies),
+      catchError(err => of([]))
+
     )
   }
 
@@ -56,7 +58,8 @@ export class MovieService {
   getTrabajos(id:string):Observable<Pelicula[]>{
     return this.httpClient.get<{peliculas: Pelicula[]}>(`${this.url}/getTrabajos/${id}`)
     .pipe(
-      map(response => response.peliculas)
+      map(response => response.peliculas),
+      catchError(err => of([]))
     )
   }
 

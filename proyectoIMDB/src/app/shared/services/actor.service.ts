@@ -16,7 +16,8 @@ export class ActorService {
   getActores(): Observable<Actor[]>{
     return this.httpClient.get<{actores: Actor[]}>(`${this.url}/Actors`)
     .pipe(
-      map(response => response.actores)
+      map(response => response.actores),
+      catchError(err => of([]))
     )
   }
   // getActores(): Observable<Actor[]> {
@@ -63,7 +64,8 @@ export class ActorService {
   getReparto(id:string):Observable<Actor[]>{
     return this.httpClient.get<{actores: Actor[]}>(`${this.url}/getReparto/${id}`)
     .pipe(
-      map(response => response.actores)
+      map(response => response.actores),
+      catchError(err => of([]))
     )
   } 
 
