@@ -4,7 +4,7 @@ export interface Pelicula {
   descripcion:  string;
   genero:       string[];
   director:     string;
-  lanzamiento:  number;
+  lanzamiento:  string;
   calificacion: number;
   portada:      string;
   fotosExtra:   string[];
@@ -32,4 +32,10 @@ export interface User {
   name:       string;
   correo:     string;
   contrasena: string;
+}
+
+export interface AuthResponse {
+  message: string;
+  flag: boolean;
+  rol?: number;
 }

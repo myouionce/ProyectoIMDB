@@ -1,4 +1,16 @@
 @if(dataType){
+    <h3>Buscador</h3>
+
+    <mat-form-field>
+        <mat-label>Buscar actor...</mat-label>
+        <input 
+            matInput    
+            type="text"
+            (keyup)="searchActor()"
+            [formControl] = "searchInput"
+        >
+
+    </mat-form-field>
     <h1 class="text-3xl">Actores</h1>
     <div class="grid grid-cols-4 pt-2 ">
         @for (actor of paginatedData; track $index) {

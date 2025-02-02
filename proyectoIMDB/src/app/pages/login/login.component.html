@@ -4,14 +4,16 @@
       <form [formGroup]="userForm">
         <div class="mb-3">
           <mat-form-field class="w-full">
-            <mat-label>Usuario o email</mat-label>
+            <mat-label>Email</mat-label>
             <input matInput formControlName="correo" required>
+            <mat-error *ngIf="userForm.get('correo')?.invalid">Correo inválido</mat-error>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field class="w-full">
             <mat-label>Contraseña</mat-label>
             <input type="password" matInput formControlName="contrasena" required>
+            <mat-error *ngIf="userForm.get('contrasena')?.invalid">Contraseña requerida</mat-error>
           </mat-form-field>
         </div>
       </form>
@@ -22,10 +24,15 @@
         Sign in
       </button>
       <button mat-flat-button
-        [routerLink]="'/admin'">
-        log in
+      [disabled]="userForm.invalid"
+      (click)="submit()">
+        Log in
       </button>
     </div>
+    <p style="color: red; font-weight:500;">
+      {{texto}}
+    </p>
+
   </mat-card>
   
 </div>

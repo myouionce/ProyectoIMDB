@@ -54,9 +54,9 @@ export class ActorService {
 
   // api.get('/ActorsFiltered', ActorController.getActorByFilters);
   getActorsByFilter(term: string):Observable<Actor[]>{
-    return this.httpClient.get<Actor[]>(`${this.url}/Actors`)
+    return this.httpClient.get<{actores: Actor[]}>(`${this.url}/Actors`)
     .pipe(
-      map(actores=>actores.filter(actor=>actor.nombre.toLowerCase().includes(term.toLowerCase())))
+      map(response=>response.actores.filter(actor=>actor.nombre.toLowerCase().includes(term.toLowerCase())))
     );
   }
   // api.get('/getReparto', ActorController.getReparto);
