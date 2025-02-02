@@ -97,7 +97,7 @@ export class MovieComponent {
   ngOnInit():void{
     if(this.router.url.includes('add-')){
       this.movieMode = 'add';
-      this.generos = ['Accion', 'Terror', 'Drama']
+      
       this.actorService.getActores().subscribe(
         actores => {this.actores_data = actores;
           this.actores_filtrados = [...actores];
@@ -106,6 +106,8 @@ export class MovieComponent {
       )
       return;
     }
+    this.generos = ["Drama", "Crimen", "Comedia", "Accion"];
+    
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
     
@@ -168,6 +170,7 @@ export class MovieComponent {
 
   createMovieForm(): FormGroup{
     return this.formBuilder.group({
+      _id:[this.movie._id],
       titulo:[this.movie.titulo, [Validators.required]],
       lanzamiento:[this.movie.lanzamiento, [Validators.required]],
       descripcion: [this.movie.descripcion, [Validators.required]],
@@ -184,6 +187,7 @@ export class MovieComponent {
   setMovieData(movie:Pelicula):void{
     if(this.movieForm){
       this.movieForm.patchValue({
+      _id:movie._id || '',
       titulo: movie.titulo || '',
       lanzamiento: movie.lanzamiento || '',
       descripcion: movie.descripcion || '',
@@ -206,6 +210,43 @@ export class MovieComponent {
         reparto: repartoValido
       });
 
+    }
+  }
+  onSubmit(){
+    if(this.movie._id){
+      this.movieService.updateMovie(this.movieForm.value)
+      .subscribe( peli => {
+        console.log("Pelicula Actualizada")
+      });
+
+      
+      let addActores = this.movieForm.value.reparto.filter((item2:Actor) => !this.movieReparto.some((item1:Actor) => item1._id === item2._id))
+                      
+      if (addActores.length>0){
+        this.movieService.addReparto(this.movie._id, addActores)
+        .subscribe( resp =>{
+          if(resp){
+
+            console.log("Reparto Agregado")
+          }else{
+            console.log("Reparto falso")
+
+          }
+        })
+      }
+      let removeActors = this.movieReparto.filter((item2:Actor) => !this.movieForm.value.reparto.some((item1:Actor) => item1._id === item2._id));
+                      
+      if (removeActors.length>0){
+        this.movieService.deleteReparto(this.movie._id, removeActors)
+        .subscribe( resp =>{
+          console.log("Reparto borrado");
+        })
+      }
+    }else{
+      this.movieService.addMovie(this.movieForm.value)
+      .subscribe( peli => {
+        console.log("Pelicula Creada")
+      });
     }
   }
 }
