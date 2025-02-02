@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, SimpleChanges } from '@angular/core';
+import { Component, inject, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -15,7 +15,7 @@ import { Actor, Pelicula } from '../../interfaces/imdb.interface';
 import { MovieService } from './../../../shared/services/movie.service';
 import { ActorService } from './../../../shared/services/actor.service';
 import { first, forkJoin, switchMap } from 'rxjs';
-
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-actor',
@@ -212,5 +212,35 @@ export class ActorComponent {
         });
   
       }
+  }
+
+  private _snackBar = inject(MatSnackBar);
+  texto: string = '';
+  guardarActor(){
+    if (this.actorForm.invalid) {
+      return; 
+    }
+
+    const nuevoActor: Actor = {
+      _id: {$oid: ''},
+      nombre: this.actorForm.value.nombre,
+      nacimiento: this.actorForm.value.nacimiento,
+      biografia: this.actorForm.value.biografia,
+      fotoPrincipal: this.actorForm.value.fotoPrincipal || '',
+      fotosExtra: this.actorForm.value.fotosExtra || []
+    };
+    console.log(nuevoActor);
+    this.actorService.addActor(nuevoActor).subscribe(response =>{
+      if(response){
+        this._snackBar.open('Actor creado', 'Cerrar', {duration: 3000});
+        this.saveTrabajos(response._id.$oid);
+      }else{
+        this.texto = 'El actor ya existe';
+      }
+    })
+  
+  }
+  saveTrabajos(id: string){
+
   }
 }
