@@ -252,12 +252,12 @@ export class MovieComponent {
       }
     }else{
       this.movieService.addMovie(this.movieForm.value)
-      .subscribe( peli => {
-        console.log(peli._id);
-        this.movieService.addReparto(peli._id, this.movieForm.value.reparto)
+      .subscribe(id => {
+        console.log(id);
+        this.movieService.addReparto(id, this.movieForm.value.reparto)
         .subscribe( resp =>{
           if(resp){
-            console.log("Pelicula Creada")
+            console.log("Pelicula Creada");
           }
         })
       });

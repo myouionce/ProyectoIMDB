@@ -55,8 +55,11 @@ export class MovieService {
   }
 
   // api.post('/saveMovie', MovieController.createMovie);
-  addMovie(pelicula: Pelicula): Observable<Pelicula> {
-    return this.httpClient.post<Pelicula>(`${this.url}/saveMovie`, pelicula);
+  addMovie(pelicula: Pelicula): Observable<string> {
+    return this.httpClient.post<{id:string}>(`${this.url}/saveMovie`, pelicula)
+      .pipe(
+        map(response => response.id)
+      );
   }
 
 
