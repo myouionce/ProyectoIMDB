@@ -104,10 +104,19 @@ export class MovieComponent {
         }
 
       )
+      this.movieService.getGeneros()
+        .subscribe(res => {
+          this.generos = res;
+        });
+          
       return;
     }
-    this.generos = ["Drama", "Crimen", "Comedia", "Accion"];
     
+    this.movieService.getGeneros()
+    .subscribe(res => {
+      this.generos = res;
+    });
+     
     //-------------------------------------------------
     //cambiar por un get con el id de la pelicula
     
@@ -158,7 +167,7 @@ export class MovieComponent {
   addImg(urlImg:string){
     let fotos = this.movieForm.value.fotosExtra;
     fotos[0] === ''?fotos[0] = urlImg:fotos.push(urlImg);
-    console.log(fotos);
+    
     this.movieForm.patchValue({fotosExtra:fotos});
   }
 
@@ -213,6 +222,7 @@ export class MovieComponent {
     }
   }
   onSubmit(){
+    
     if(this.movie._id){
       this.movieService.updateMovie(this.movieForm.value)
       .subscribe( peli => {
@@ -221,16 +231,13 @@ export class MovieComponent {
 
       
       let addActores = this.movieForm.value.reparto.filter((item2:Actor) => !this.movieReparto.some((item1:Actor) => item1._id === item2._id))
-                      
+      
       if (addActores.length>0){
         this.movieService.addReparto(this.movie._id, addActores)
         .subscribe( resp =>{
           if(resp){
 
             console.log("Reparto Agregado")
-          }else{
-            console.log("Reparto falso")
-
           }
         })
       }
