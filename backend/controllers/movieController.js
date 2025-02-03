@@ -124,7 +124,7 @@ movieCtrl.getMovieByFilters = async (req, res) => {
             filters.titulo = { $regex: keywords, $options: 'i' }; // Búsqueda insensible a mayúsculas
         }
         if (year) {
-            filters.lanzamiento = { $regex: `^${year}`, $options: 'i' }; // Filtrar por año de lanzamiento
+            filters.lanzamiento = { $regex: `${year}$`, $options: 'i' }; // Filtrar por año de lanzamiento al final de la cadena
         }
         if (rating) {
             filters.calificacion = { $gte: rating }; // Filtrar por clasificación mínima
