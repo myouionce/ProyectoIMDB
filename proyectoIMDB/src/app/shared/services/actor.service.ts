@@ -36,7 +36,7 @@ export class ActorService {
 
   // api.put('/Actors/:id', ActorController.editActorById);
   updateActor(actor: Actor): Observable<Actor> {
-    return this.httpClient.put<Actor>(`${this.url}/Actors/${actor._id.$oid}`, actor);
+    return this.httpClient.put<Actor>(`${this.url}/Actors/${actor._id}`, actor);
   }
 
   // TODO Asegurarse de que funciona ese .delete

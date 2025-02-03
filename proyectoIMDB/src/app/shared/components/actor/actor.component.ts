@@ -33,6 +33,7 @@ export class ActorComponent {
 
 
   public actor = {
+    _id: {$oid: ''},
     nombre: ' ',
     nacimiento: '',
     biografia: '',
@@ -67,31 +68,31 @@ export class ActorComponent {
     );
   }
 
-  loadTrabajos(actorId: string): void {
-    this.movieService.getTrabajos(actorId)
-      .subscribe(
-        pelis => {
+  // loadTrabajos(actorId: string): void {
+  //   this.movieService.getTrabajos(actorId)
+  //     .subscribe(
+  //       pelis => {
+          
+  //         if (!pelis) {
+  //           this.trabajos = [];
+  //           this.setActorData(this.actor);
+  //           return;
+  //         }
+  //         this.trabajos = pelis;
+  //         this.setActorData(this.actor);
 
-          if (!pelis) {
-            this.trabajos = [];
-            this.setActorData(this.actor);
-            return;
-          }
-          this.trabajos = pelis;
-          this.setActorData(this.actor);
 
-
-        },
-        error => {
-          if (error.status === 404) {
-            this.trabajos = [];
-            this.setActorData(this.actor);
-          } else {
-            console.error('Error al obtener los trabajos:', error);
-          }
-        }
-      );
-  }
+  //       },
+  //       error => {
+  //         if (error.status === 404) {
+  //           this.trabajos = [];
+  //           this.setActorData(this.actor);
+  //         } else {
+  //           console.error('Error al obtener los trabajos:', error);
+  //         }
+  //       }
+  //     );
+  // }
 
 
   ngOnInit(): void {
@@ -106,21 +107,18 @@ export class ActorComponent {
     this.activatedRouter.params
       .pipe(
         switchMap(({ id }) => this.actorService.getActorsById(id)))
-      .subscribe({
-        next: actor => {
-
+      .subscribe(actor => {
           if (!actor) {
-            this.router.navigateByUrl('/');
-            return;
+            if(this.router.url.includes('admin')){
+              return this.router.navigateByUrl('/admin');
+            }else{
+              return this.router.navigateByUrl('/user');
+            }
           }
           this.actor = actor;
-          this.loadTrabajos(actor._id as unknown as string);
-        },
-        error: err => {
-          console.error('Error al obtener el actor:', err);
-          this.router.navigateByUrl('/');
-        }
-      });
+          this.setActorData(actor);
+          return;
+      })
 
     forkJoin({
       trabajos1: this.activatedRouter.params.pipe(
@@ -178,6 +176,7 @@ export class ActorComponent {
 
   createActorForm(): FormGroup {
     return this.formBuilder.group({
+      _id:[this.actor._id],
       nombre: [this.actor.nombre, [Validators.required]],
       nacimiento: [this.actor.nacimiento, [Validators.required]],
       biografia: [this.actor.biografia, [Validators.required]],
@@ -192,6 +191,7 @@ export class ActorComponent {
     if (this.actorForm) {
 
       this.actorForm.patchValue({
+        _id:actor._id || '',
         nombre: actor.nombre || '',
         nacimiento: actor.nacimiento || '',
         biografia: actor.biografia || '',
@@ -216,31 +216,58 @@ export class ActorComponent {
 
   private _snackBar = inject(MatSnackBar);
   texto: string = '';
-  guardarActor() {
-    if (this.actorForm.invalid) {
-      return;
+  guardarActor(){
+    if(this.actor._id){
+      console.log(this.actorForm.value);
+      this.actorService.updateActor(this.actorForm.value)
+      .subscribe( actor => {
+        console.log("Actor Actualizada")
+      });
+
+      
+      let addTrabajos = this.actorForm.value.trabajos.filter((item2:Pelicula) => !this.trabajos.some((item1:Pelicula) => item1._id === item2._id))
+      
+      // if (addTrabajos.length>0){
+      //   this.actorService.addTrabajos(this.actor._id, addTrabajos)
+      //   .subscribe( resp =>{
+      //     if(resp){
+
+      //       console.log("Trabajo Agregado")
+      //     }
+      //   })
+      // }
+      // let removetrabajos = this.trabajos.filter((item2:Pelicula) => !this.actorForm.value.trabajos.some((item1:Pelicula) => item1._id === item2._id));
+                      
+      // if (removetrabajos.length>0){
+      //   this.actorService.deleteTrabajo(this.actor._id, removetrabajos)
+      //   .subscribe( resp =>{
+      //     console.log("Reparto borrado");
+      //   })
+      // }
+    }else{
+      this.actorService.addActor(this.actorForm.value)
+      .subscribe( actor => {
+        console.log("Actor Creada")
+      });
     }
 
-    const nuevoActor: Actor = {
-      _id: { $oid: '' },
-      nombre: this.actorForm.value.nombre,
-      nacimiento: this.actorForm.value.nacimiento,
-      biografia: this.actorForm.value.biografia,
-      fotoPrincipal: this.actorForm.value.fotoPrincipal || '',
-      fotosExtra: this.actorForm.value.fotosExtra || []
-    };
-
-
-    this.actorService.addActor(nuevoActor).subscribe(response =>{
-      if(response){
-        this._snackBar.open('Actor creado', 'Cerrar', {duration: 3000});
-        this.saveTrabajos(response._id.$oid);
-      }else{
-
-        this.texto = 'El actor ya existe';
-      }
-    })
-
+    // const nuevoActor: Actor = {
+    //   _id: {$oid: ''},
+    //   nombre: this.actorForm.value.nombre,
+    //   nacimiento: this.actorForm.value.nacimiento,
+    //   biografia: this.actorForm.value.biografia,
+    //   fotoPrincipal: this.actorForm.value.fotoPrincipal || '',
+    //   fotosExtra: this.actorForm.value.fotosExtra || []
+    // };
+    // this.actorService.addActor(nuevoActor).subscribe(response =>{
+    //   if(response){
+    //     this._snackBar.open('Actor creado', 'Cerrar', {duration: 3000});
+    //     this.saveTrabajos(response._id.$oid);
+    //   }else{
+    //     this.texto = 'El actor ya existe';
+    //   }
+    // })
+  
   }
   saveTrabajos(id: string) {
     let dataMovie = this.actorForm.value.trabajos;
