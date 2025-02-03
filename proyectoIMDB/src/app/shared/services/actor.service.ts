@@ -70,6 +70,23 @@ export class ActorService {
   }
 
   // api.get()
-
+  addTrabajo(id:string,trabajos:any[]):Observable<boolean>{
+    console.log("reparto:",trabajos);
+    console.log(id);
+    return this.httpClient.post<boolean>(`${this.url}/addAMovieActor`, {idActor:id, listaPeliculas:trabajos})
+    .pipe(
+      map(resp => true),
+      catchError(err => of(false))
+    )
+  }
+  
+  deleteTrabajo(id:string,trabajos:any[]):Observable<boolean>{
+    // console.log("repartoAborrar:",reparto);
+    return this.httpClient.post<boolean>(`${this.url}/deleteMovieActor`, {idActor:id, listaPeliculas:trabajos} )
+    .pipe(
+      map(resp => true),
+      catchError(err => of(false))
+    );
+  }
 
 }

@@ -140,8 +140,8 @@ actorCtrl.createActor = async (req, res) => {
     try {
         const { nombre, nacimiento, biografia, fotoPrincipal, fotosExtra } = req.body;
         const newActor = new Actor({ nombre, nacimiento, biografia, fotoPrincipal, fotosExtra });
-        await newActor.save();
-        return res.status(201).send({ message: 'Actor creado correctamente' });
+        const savedActor = await newActor.save();
+        return res.status(201).send({ message: 'Actor creado correctamente', _id: savedActor._id });
     } catch (err) {
         return res.status(500).send({ message: 'Error al crear al actor' });
     }
@@ -181,8 +181,9 @@ actorCtrl.deleteActor = async (req, res) => {
  */
 actorCtrl.addAMovieActor = async (req, res) => {
     try {
+        
         const { idActor, listaPeliculas } = req.body;
-
+        console.log(req.body);
         for (const idPelicula of listaPeliculas) {
             const existingRelation = await actorXmovie.findOne({ idPelicula, idActor });
             if (existingRelation) {

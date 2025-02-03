@@ -162,8 +162,8 @@ movieCtrl.createMovie = async (req, res) => {
     try {
         const { titulo, descripcion, genero, director, lanzamiento, calificacion, portada, fotosExtra } = req.body;
         const newMovie = new Movie({ titulo, descripcion, genero, director, lanzamiento, calificacion, portada, fotosExtra });
-        await newMovie.save();
-        return res.status(201).send({ message: 'Pelicula creada correctamente' });
+        const datanewMovie = await newMovie.save();
+        return res.status(201).send({ message: 'Pelicula creada correctamente' ,"id":datanewMovie._id});
     } catch (err) {
         return res.status(500).send({ message: 'Error al crear la pelicula' });
     }
