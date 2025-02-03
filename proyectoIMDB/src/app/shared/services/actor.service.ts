@@ -49,8 +49,11 @@ export class ActorService {
   }
 
   // api.post('/saveActor', ActorController.createActor);
-  addActor(actor: Actor): Observable<Actor> {
-    return this.httpClient.post<Actor>(`${this.url}/saveActor`, actor);
+  addActor(actor: Actor): Observable<string> {
+    return this.httpClient.post<{_id:string}>(`${this.url}/saveActor`, actor)
+    .pipe(
+      map(response => response._id)
+    );
   }
 
   // api.get('/ActorsFiltered', ActorController.getActorByFilters);
@@ -71,8 +74,7 @@ export class ActorService {
 
   // api.get()
   addTrabajo(id:string,trabajos:any[]):Observable<boolean>{
-    console.log("reparto:",trabajos);
-    console.log(id);
+
     return this.httpClient.post<boolean>(`${this.url}/addAMovieActor`, {idActor:id, listaPeliculas:trabajos})
     .pipe(
       map(resp => true),

@@ -33,7 +33,7 @@ export class ActorComponent {
 
 
   public actor = {
-    _id: {$oid: ''},
+    _id: '',
     nombre: ' ',
     nacimiento: '',
     biografia: '',
@@ -115,7 +115,11 @@ export class ActorComponent {
               return this.router.navigateByUrl('/user');
             }
           }
-          this.actor = actor;
+          
+          this.actor = {
+            ...actor,
+            _id: String(actor._id)
+          };
           this.setActorData(actor);
           return;
       })
@@ -186,12 +190,12 @@ export class ActorComponent {
     });
   }
 
-  setActorData(actor: any): void {
-
+  setActorData(actor: Actor): void {
+ 
     if (this.actorForm) {
 
       this.actorForm.patchValue({
-        _id:actor._id || '',
+        _id:actor._id|| '',
         nombre: actor.nombre || '',
         nacimiento: actor.nacimiento || '',
         biografia: actor.biografia || '',
@@ -217,8 +221,9 @@ export class ActorComponent {
   private _snackBar = inject(MatSnackBar);
   texto: string = '';
   guardarActor(){
+    
     if(this.actor._id){
-      console.log(this.actorForm.value);
+      
       this.actorService.updateActor(this.actorForm.value)
       .subscribe( actor => {
         console.log("Actor Actualizada")
@@ -227,30 +232,37 @@ export class ActorComponent {
       
       let addTrabajos = this.actorForm.value.trabajos.filter((item2:Pelicula) => !this.trabajos.some((item1:Pelicula) => item1._id === item2._id))
       
-      // if (addTrabajos.length>0){
-      //   this.actorService.addTrabajos(this.actor._id, addTrabajos)
-      //   .subscribe( resp =>{
-      //     if(resp){
+      if (addTrabajos.length>0){
+        this.actorService.addTrabajo(this.actor._id, addTrabajos)
+        .subscribe( resp =>{
+          if(resp){
 
-      //       console.log("Trabajo Agregado")
-      //     }
-      //   })
-      // }
-      // let removetrabajos = this.trabajos.filter((item2:Pelicula) => !this.actorForm.value.trabajos.some((item1:Pelicula) => item1._id === item2._id));
+            console.log("Trabajo Agregado")
+          }
+        })
+      }
+      let removetrabajos = this.trabajos.filter((item2:Pelicula) => !this.actorForm.value.trabajos.some((item1:Pelicula) => item1._id === item2._id));
                       
-      // if (removetrabajos.length>0){
-      //   this.actorService.deleteTrabajo(this.actor._id, removetrabajos)
-      //   .subscribe( resp =>{
-      //     console.log("Reparto borrado");
-      //   })
-      // }
+      if (removetrabajos.length>0){
+        this.actorService.deleteTrabajo(this.actor._id, removetrabajos)
+        .subscribe( resp =>{
+          console.log("Reparto borrado");
+        })
+      }
     }else{
       this.actorService.addActor(this.actorForm.value)
-      .subscribe( actor => {
-        console.log("Actor Creada")
+      .subscribe( id => {
+        this.actorService.addTrabajo(id, this.actorForm.value.trabajos)
+        .subscribe(resp =>{
+          if(resp){
+            console.log("Actor Creado");
+          }
+        })
       });
     }
 
+
+    //-------------------------------------------
     // const nuevoActor: Actor = {
     //   _id: {$oid: ''},
     //   nombre: this.actorForm.value.nombre,

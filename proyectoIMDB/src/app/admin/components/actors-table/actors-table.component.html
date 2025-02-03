@@ -1,6 +1,4 @@
 
-
-
 <div *ngIf="dataSource.data && dataSource.data.length < 1; else table" 
     class="alert alert-warning text-center">
     No hay actores que mostrar
@@ -42,37 +40,6 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
       <tr mat-row *matRowDef="let row; columns:displayedColumns;" ></tr>
-
-      <!-- <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Icon</th>
-          <th>Bandera</th>
-          <th>Nombre</th>
-          <th>Capital</th>
-          <th>Población</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let country of actores; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>
-            {{ country.flag }}
-          </td>
-          <td>
-            <img [src]="country.flags.svg" [alt]="country.name.common" height="20" width="30">
-          </td>
-          <td>{{ country.name.common }}</td>
-          <td>{{ country.capital }}</td>
-          <td>{{ country.population | number }}</td>
-          <td>
-            <a [routerLink]="[ '/admin/actor/']" >view</a>
-          </td>
-  
-        </tr>
-      </tbody>
-   -->
     </table>
   
 

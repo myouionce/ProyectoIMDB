@@ -26,34 +26,6 @@ export class ActorsTableComponent implements AfterViewInit {
     private actorService: ActorService
   ) { }
 
-  // public trabajos = [
-  //   {
-  //     titulo: "Crepúsculo",
-  //     año: 2008,
-  //     rol: "Edward Cullen"
-  //   },
-  //   {
-  //     titulo: "Cosmopolis",
-  //     año: 2012,
-  //     rol: "Eric Packer"
-  //   },
-  //   {
-  //     titulo: "The Rover",
-  //     año: 2014,
-  //     rol: "Rey"
-  //   },
-  //   {
-  //     titulo: "Good Time",
-  //     año: 2017,
-  //     rol: "Connie Nikas"
-  //   },
-  //   {
-  //     titulo: "The Batman",
-  //     año: 2022,
-  //     rol: "El Acertijo (Riddler)"
-  //   }
-  // ]
-
 
   @Input()
   public actores: Actor[] = [];
@@ -70,9 +42,13 @@ export class ActorsTableComponent implements AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['actores']) {
-      this.dataSource.data = this.actores;
-      this.dataSource._updateChangeSubscription(); // Actualiza la tabla
+    if (changes['actores'] && this.actores) {
+      this.dataSource = new MatTableDataSource(this.actores);
+      
+      setTimeout(() => {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
     }
   }
 

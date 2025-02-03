@@ -46,11 +46,17 @@ export class MoviesTableComponent implements AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['peliculas']) {
+    if (changes['peliculas'] && this.peliculas) {
       this.dataSource.data = this.peliculas;
       this.dataSource._updateChangeSubscription(); // Actualiza la tabla
+  
+      setTimeout(() => {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
     }
   }
+  
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
