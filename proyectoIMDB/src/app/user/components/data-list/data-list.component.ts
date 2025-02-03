@@ -8,14 +8,15 @@ import { ActivatedRoute } from '@angular/router';
 import { ActorCardComponent } from "../actor-card/actor-card.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-data-list',
   imports: [CommonModule, MovieCardComponent, ActorCardComponent, MatButtonModule, MatIconModule, MatInputModule,
-    MatFormFieldModule, ReactiveFormsModule],
+    MatFormFieldModule, ReactiveFormsModule, MatSelectModule],
   templateUrl: './data-list.component.html',
   styleUrl: './data-list.component.scss'
 })
@@ -23,13 +24,23 @@ export class DataListComponent {
   public dataType: boolean = false;
   public data: any[] = [];
   public searchInput = new FormControl();
+  public isAscending: boolean = true;
+
+  searchForm!: FormGroup;
+
+  public generosS:string[] = [];
+  public sortS:string[] = ["titulo", "lanzamiento", "calificacion"];
+  
 
   
   constructor(
     private actorService: ActorService,
     private movieService: MovieService,
+    private formBuilder:FormBuilder,
     private route: ActivatedRoute
-  ){}
+  ){ 
+    this.searchForm = this.createSearchForm();
+  }
 
 
   ngOnInit(): void {
@@ -50,6 +61,11 @@ export class DataListComponent {
       }
     });
 
+    this.movieService.getGeneros()
+    .subscribe(res => {
+      this.generosS = res;
+    });
+
 
   }
 
@@ -58,6 +74,17 @@ export class DataListComponent {
 
     this.actorService.getActorsByFilter(value)
       .subscribe( actores => this.data = actores );
+  }
+
+  searchPelicula(): void{
+    
+    // this.searchForm.value.
+    // this.movieService.getFilteredMovies()
+    //   .subscribe( actores => this.data = actores );
+  }
+
+  search(){
+    
   }
 
   // this.movieService.getFilteredMovies('','','','','titulo','asc')
@@ -77,6 +104,18 @@ export class DataListComponent {
     return Math.ceil(this.data.length / this.itemsPerPage);
   }
   
+  createSearchForm(): FormGroup{
+    return this.formBuilder.group({
+      searchInput:[''],
+      genre:[],
+      year:['',[Validators.maxLength(4)]],
+      rating:[1,[Validators.min(1),Validators.max(10)]],
+      sortBy:["titulo"],
+      order:["asc"]
+    });
+  }
+
+
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -89,4 +128,8 @@ export class DataListComponent {
     }
   }
   
+  toggleSort() {
+    this.isAscending = !this.isAscending; // Alternar entre true y false
+    this.searchForm.patchValue({order:(this.isAscending?'asc':'desc')}) // Aquí puedes enviar el valor donde lo necesites
+  }
 }
