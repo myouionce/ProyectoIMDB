@@ -76,22 +76,26 @@ export class DataListComponent {
       .subscribe( actores => this.data = actores );
   }
 
-  searchPelicula(): void{
-    
-    // this.searchForm.value.
-    // this.movieService.getFilteredMovies()
-    //   .subscribe( actores => this.data = actores );
-  }
 
   search(){
+    const formValues = this.searchForm.value;
+
+    // Convertimos los géneros en una cadena separada por comas
+    const genreString = formValues.genre ? formValues.genre.join(',') : '';
+    // genres: string, keywords: string, year: string, rating: string, sortBy: string, order: string
+    this.movieService.getFilteredMovies(
+      genreString,
+      formValues.searchInput,
+      formValues.year,
+      formValues.rating,
+      formValues.sortBy,
+      formValues.order,
+    ).subscribe(movies => {
+      this.data = movies;
+    });
     
   }
 
-  // this.movieService.getFilteredMovies('','','','','titulo','asc')
-  //         .subscribe(movies => {
-  //           this.data = movies;
-  //           console.log(movies);
-  //         });
 
   currentPage = 1;
   itemsPerPage = 12;
