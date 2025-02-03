@@ -41,7 +41,7 @@ export class DataListComponent {
           .subscribe(actores  => this.data = actores);
       } else if (path.includes('movielist')) {
         this.dataType = false;
-        this.movieService.getMovies()
+        this.movieService.getFilteredMovies('','','','','titulo','asc')
           .subscribe(movies => {
             this.data = movies;
             console.log(movies);
@@ -59,6 +59,12 @@ export class DataListComponent {
     this.actorService.getActorsByFilter(value)
       .subscribe( actores => this.data = actores );
   }
+
+  // this.movieService.getFilteredMovies('','','','','titulo','asc')
+  //         .subscribe(movies => {
+  //           this.data = movies;
+  //           console.log(movies);
+  //         });
 
   currentPage = 1;
   itemsPerPage = 12;

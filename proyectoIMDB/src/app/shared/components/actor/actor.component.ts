@@ -229,7 +229,6 @@ export class ActorComponent {
       fotoPrincipal: this.actorForm.value.fotoPrincipal || '',
       fotosExtra: this.actorForm.value.fotosExtra || []
     };
-    console.log(nuevoActor);
     this.actorService.addActor(nuevoActor).subscribe(response =>{
       if(response){
         this._snackBar.open('Actor creado', 'Cerrar', {duration: 3000});

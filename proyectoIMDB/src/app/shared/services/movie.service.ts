@@ -60,9 +60,13 @@ export class MovieService {
   }
 
 
-  // TODO api.get('/MoviesFiltered', MovieController.getMovieByFilters);
-  getFilteredMovies(): Observable<Pelicula[]> {
-    return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
+  // api.get('/MoviesFiltered', MovieController.getMovieByFilters);
+  getFilteredMovies(genres: string, keywords: string, year: string, rating: string, sortBy: string, order: string): Observable<Pelicula[]> {
+    return this.httpClient.get<{ movies: Pelicula[] }>(`${this.url}/MoviesFiltered?genre=${genres}&keywords=${keywords}&year=${year}&rating=${rating}&sortBy=${sortBy}&order=${order}`).pipe(
+      map(response => response.movies),
+      catchError(err => of([]))
+
+    )
   }
   //api.get('/getTrabajos',MovieController.getTrabajos);
   getTrabajos(id: string): Observable<Pelicula[]> {
