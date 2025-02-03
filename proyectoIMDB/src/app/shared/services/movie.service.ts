@@ -21,6 +21,16 @@ export class MovieService {
     )
   }
 
+  getGeneros(): Observable<string[]> {
+    return this.httpClient.get<{ movieGenders: any[] }>(`${this.url}/getGenders`).pipe(
+      map(response => {
+        return response.movieGenders.map(genero => genero.genero);
+      }),
+      catchError(err => of([]))
+
+    )
+  }
+
   // api.get('/Movies/:id', MovieController.getMovieById);
   getMovieById(id: string): Observable<Pelicula | undefined> {
     return this.httpClient.get<{ movies: Pelicula }>(`${this.url}/Movies/${id}`)
@@ -50,9 +60,13 @@ export class MovieService {
   }
 
 
-  // TODO api.get('/MoviesFiltered', MovieController.getMovieByFilters);
-  getFilteredMovies(): Observable<Pelicula[]> {
-    return this.httpClient.get<Pelicula[]>(`${this.url}/Movies`)
+  // api.get('/MoviesFiltered', MovieController.getMovieByFilters);
+  getFilteredMovies(genres: string, keywords: string, year: string, rating: string, sortBy: string, order: string): Observable<Pelicula[]> {
+    return this.httpClient.get<{ movies: Pelicula[] }>(`${this.url}/MoviesFiltered?genre=${genres}&keywords=${keywords}&year=${year}&rating=${rating}&sortBy=${sortBy}&order=${order}`).pipe(
+      map(response => response.movies),
+      catchError(err => of([]))
+
+    )
   }
   //api.get('/getTrabajos',MovieController.getTrabajos);
   getTrabajos(id: string): Observable<Pelicula[]> {
@@ -65,8 +79,8 @@ export class MovieService {
 
 
   addReparto(id:string,reparto:any[]):Observable<boolean>{
-    // console.log("reparto:",reparto);
-    return this.httpClient.post<boolean>(`${this.url}/addActorMovie`, {body:{idPelicula:id, listaActor:reparto}})
+     
+    return this.httpClient.put<boolean>(`${this.url}/addActorsMovie`, {idPelicula:id, listaActor:reparto})
     .pipe(
       map(resp => true),
       catchError(err => of(false))
@@ -74,7 +88,7 @@ export class MovieService {
   }
   
   deleteReparto(id:string,reparto:any[]):Observable<boolean>{
-    // console.log("repartoAborrar:",reparto);
+    
     return this.httpClient.post<boolean>(`${this.url}/deleteActorsMovie`, { idPelicula: id, listaActor: reparto } )
     .pipe(
       map(resp => true),

@@ -20,6 +20,60 @@
         }
     </div>
 }@else {
+    <form [formGroup]="searchForm">
+        <h3>Buscador</h3>
+        <div class="flex justify-content-between w-full">
+            <div class="w-2">
+                <mat-form-field class="full">
+                    <mat-label>Buscar Pelicula...</mat-label>
+                    <input 
+                    matInput    
+                    type="text"
+                    (keyup)="searchPelicula()"
+                    formControlName = "searchInput"
+                    >
+                    
+                </mat-form-field>
+            </div>
+            <div class="w-7 flex gap-1 align-items-baseline">
+
+                <mat-form-field class="w-3">
+                    <mat-label>Generos</mat-label>
+                    <mat-select multiple formControlName="genre" >
+                        @for (gender of generosS; track gender) {
+                            <mat-option [value]="gender">{{gender}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-2">
+                    <mat-label>Año</mat-label>
+                    <input matInput  formControlName="year">
+                </mat-form-field>
+                <mat-form-field class="w-2">
+                    <mat-label>Calificacion</mat-label>
+                    <input matInput  formControlName="rating">
+                </mat-form-field>
+                <mat-form-field class="w-3">
+                    <mat-label>Ordenar Por</mat-label>
+                    <mat-select formControlName="sortBy" >
+                        @for (val of sortS; track val) {
+                            <mat-option [value]="val">{{val}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <div class="flex w-2 inline-flex justify-content-evenly align-items-center">
+                    <button mat-mini-fab (click)="toggleSort()">
+                        <mat-icon>{{ isAscending ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                    </button>
+                    <button mat-fab  (click)="search()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+    </form>
     <h1 class="text-3xl">Películas</h1>
     <div class="grid grid-cols-4 pt-2 ">
         @for (pelicula of paginatedData; track $index) {

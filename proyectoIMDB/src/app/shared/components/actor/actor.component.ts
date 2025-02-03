@@ -229,13 +229,14 @@ export class ActorComponent {
       fotoPrincipal: this.actorForm.value.fotoPrincipal || '',
       fotosExtra: this.actorForm.value.fotosExtra || []
     };
-    
-    this.actorService.addActor(nuevoActor).subscribe(response => {
-      if (response) {
-        this._snackBar.open('Actor creado', 'Cerrar', { duration: 3000 });
-        
-        this.saveTrabajos(response._id.toString());
-      } else {
+
+
+    this.actorService.addActor(nuevoActor).subscribe(response =>{
+      if(response){
+        this._snackBar.open('Actor creado', 'Cerrar', {duration: 3000});
+        this.saveTrabajos(response._id.$oid);
+      }else{
+
         this.texto = 'El actor ya existe';
       }
     })
