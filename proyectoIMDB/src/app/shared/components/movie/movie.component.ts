@@ -95,6 +95,7 @@ export class MovieComponent {
   }
 
   ngOnInit():void{
+    
     if(this.router.url.includes('add-')){
       this.movieMode = 'add';
       
@@ -252,8 +253,15 @@ export class MovieComponent {
     }else{
       this.movieService.addMovie(this.movieForm.value)
       .subscribe( peli => {
-        console.log("Pelicula Creada")
+        console.log(peli._id);
+        this.movieService.addReparto(peli._id, this.movieForm.value.reparto)
+        .subscribe( resp =>{
+          if(resp){
+            console.log("Pelicula Creada")
+          }
+        })
       });
+      
     }
   }
 }
