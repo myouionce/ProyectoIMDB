@@ -60,7 +60,7 @@
                         }
                     </mat-select>
                 </mat-form-field>
-                <div class="flex w-2 inline-flex justify-content-evenly align-items-center">
+                <div class="w-2 inline-flex justify-content-evenly align-items-center">
                     <button mat-mini-fab (click)="toggleSort()">
                         <mat-icon>{{ isAscending ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
                     </button>
@@ -84,6 +84,6 @@
 }
 <div class="flex align-items-center justify-content-center mt-4">
     <button mat-mini-fab (click)="prevPage()" [disabled]="currentPage === 1"><mat-icon>arrow_back_ios</mat-icon></button>
-    <span style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="mx-3" >Página {{ currentPage }}</span>
+    <span style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" class="mx-3" >Página {{ currentPage }} de {{ totalPages }}</span>
     <button mat-mini-fab (click)="nextPage()" [disabled]="currentPage >= totalPages"><mat-icon>arrow_forward_ios</mat-icon></button>
 </div>

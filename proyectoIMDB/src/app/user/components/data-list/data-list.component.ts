@@ -29,7 +29,7 @@ export class DataListComponent {
   searchForm!: FormGroup;
 
   public generosS:string[] = [];
-  public sortS:string[] = ["titulo", "lanzamiento", "calificacion"];
+  public sortS:string[] = ["titulo", "calificacion"];
   
 
   
